@@ -1,0 +1,51 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Web Map Editor</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+    <script src="./javascript/knockout-2.1.0.js"></script>
+    <script src="./javascript/animationframe.js"></script>
+    <script src="./javascript/utils.js"></script>
+    <script src="./javascript/editor.js"></script>
+    <script>
+      $(function() {
+        var win = $(window);
+        var e = new Editor($('#editor')[0], $('#panel'), win.width(), win.height());
+        win.resize(function(ev) {
+          e.resize(win.width(), win.height());
+        });
+        ko.applyBindings(e);
+      })
+    </script>
+    <style>
+      html, body {
+        height: 100%;
+        width: 100%;
+      }
+      html, body, canvas, div {
+        margin: 0;
+        padding: 0;
+      }
+      #panel {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        width: 250px;
+      }
+      #editor {
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="panel">
+      <p>Viewport : <strong data-bind="text: Math.round(mapPos().x*100)/100"></strong> , <strong data-bind="text: Math.round(mapPos().y*100)/100"></strong></p>
+      <p>Rate : <span class="fps"></span> fps</p>
+    </div>
+    <canvas id="editor" data-bind="move: mapPos"></canvas>
+  </body>
+</html>
