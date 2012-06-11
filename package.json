@@ -1,0 +1,16 @@
+{
+    "name": "web-mapeditor"
+  , "version": "0.0.1"
+  , "private": true
+  , "dependencies": {
+      "express": "2.5.0"
+    , "stylus": ">= 0.0.1"
+    , "ejs": ">= 0.0.1"
+    , "socket.io": "latest"
+    , "mongoose": ">= 2.6.4"
+    , "connect-redis": ">= 1.3.0"
+  },
+  "engines": {
+    "node": ">= 0.6.x"
+  }
+}

@@ -1,3 +1,5 @@
+var Game;
+
 function Editor(canvas, panel, w, h) {
     // dom
     this._fps = panel.find('.fps');
@@ -70,3 +72,13 @@ Editor.prototype = {
     ctx.restore();
   }
 };
+
+Game.addState('Editor', {
+  init: function() {
+  },
+  update: function(now) {
+    
+  },
+  destroy: function() {
+  }
+});
