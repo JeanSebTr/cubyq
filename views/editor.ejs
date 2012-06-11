@@ -3,14 +3,14 @@
   <head>
     <title>Web Map Editor</title>
     <script src="/javascript/modernizr.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
-    <script src="/javascript/knockout-2.1.0.js"></script>
-    <script src="/javascript/game.js"></script>
+    <script src="/engine/game.js"></script>
+    <script src="/engine/loader.js"></script>
     <script>
-      Game.init({
+      Game.init([
         // initial resources to load
-        
-      }, // onProgress Callback
+        {tag: 'script', src: '/javascript/knockout-2.1.0.js'},
+        {tag: 'script', src: 'https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js'}
+      ], // onProgress Callback
       function(event) {
         /* event = {
           progess: 0.0 @ 1.0
@@ -22,14 +22,6 @@
       function() {
         Game.changeState('Editor');
       });
-      $(function() {
-        var win = $(window);
-        var e = new Editor($('#editor')[0], $('#panel'), win.width(), win.height());
-        win.resize(function(ev) {
-          e.resize(win.width(), win.height());
-        });
-        ko.applyBindings(e);
-      })
     </script>
     <style>
       html, body {

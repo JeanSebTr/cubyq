@@ -74,6 +74,9 @@ Editor.prototype = {
 };
 
 Game.addState('Editor', {
+  resources: [
+    
+  ],
   init: function() {
   },
   update: function(now) {

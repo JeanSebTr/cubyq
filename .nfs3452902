@@ -1,0 +1,2 @@
+[submodule "vendor/closure-library"]
+	path = vendor/closure-library
