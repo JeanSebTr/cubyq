@@ -1,4 +1,4 @@
-var Game;
+var Game, ko;
 
 function Editor(canvas, panel, w, h) {
     // dom
@@ -78,10 +78,13 @@ Game.addState('Editor', {
     
   ],
   init: function() {
+    this.editor = new Editor();
+    ko.applyBindings(this.editor);
   },
-  update: function(now) {
-    
+  update: function(dt) {
+    this.editor.update(dt);
   },
   destroy: function() {
+    
   }
 });
