@@ -8,9 +8,12 @@ var states = {}
 // game loop
 var frameReq = null;
 
+var need = [];
+
 var Game = {
   init: function(resources, progress, end) {
-    
+    var deps = need.concat(resources);
+    Game.Load(deps, progress, end);
   },
   addState: function(name, definition) {
     states[name] = definition;
@@ -30,7 +33,7 @@ var Game = {
     }
   },
   need: function(resource) {
-    // TODO : add to resources load queue
+    need.push(resource);
   }
 };
 
