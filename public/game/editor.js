@@ -1,70 +1,60 @@
 var Game, ko;
 
-function Editor(canvas, panel, w, h) {
-    // dom
-    this._fps = panel.find('.fps');
-    
-    // map
-    this.mapPos = ko.observable({x: 0.0, y: 0.0, m: true});
-    this.tileSize = 50;
-    
-    // canvas
-    this.canvas = canvas;
-    canvas.width = w - 250;
-    canvas.height = h;
-    this.ctx = canvas.getContext('2d');
-    this.loop = this.loop.bind(this);
-    this.fps = new FPS(Date.now());
-    window.requestAnimationFrame(this.loop);
+function Editor(viewport, panel, canvas) {
+  var self = this;
+
+  // an observable linking window and canvas size
+  this.size = ko.observable({w: 150, h: 150});
+
+  //
+  this.viewport = viewport;
+
+  // overlay
+  this.canvas = canvas;
+  this.ctx = canvas.getContext('2d');
+  this.drawOverlay();
+  this.viewport.position.subscribe(function(val) {
+    self.drawOverlay();
+  });
 }
 Editor.prototype = {
-  resize: function(w, h) {
-    this.canvas.width = w - 250;
-    this.canvas.height = h;
-  },
-  loop: function(now) {
-    if(!now) now = Date.now();
-    window.requestAnimationFrame(this.loop);
-    
-    // draw
-    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-    this.drawMetrics();
-    
-    // stats
-    this.fps.increment(now);
-    this._fps.text(this.fps.calc());
-  },
-  drawMetrics: function() {
-    var ctx = this.ctx
-      , pos = this.mapPos();
+  drawOverlay: function() {
+
+    var pos = this.viewport.position()
+      , ctx = this.ctx
+      , canvas = this.canvas
+      , tileSize = 50;
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
     ctx.save();
     
     // prepare style
-    ctx.lineWidth = 1;
+    ctx.lineWidth = 2;
     ctx.lineCap = 1;
     ctx.strokeStyle = '#FF0000';
     ctx.beginPath();
     
     // vertical bar
     var dx = pos.x%1*-1
-      , x = Math.round(dx*this.tileSize);
-    while(x<this.canvas.width) {
+      , x = Math.round(dx*tileSize);
+    while(x<canvas.width) {
       ctx.moveTo(x, 15);
       ctx.lineTo(x, 40);
-      ctx.moveTo(x, this.canvas.height - 40);
-      ctx.lineTo(x, this.canvas.height - 15);
-      x+=this.tileSize;
+      ctx.moveTo(x, canvas.height - 40);
+      ctx.lineTo(x, canvas.height - 15);
+      x+=tileSize;
     }
     
     // horizontal bar
     var dy = pos.y%1*-1
-      , y = Math.round(dy*this.tileSize);
-    while(y<this.canvas.height) {
+      , y = Math.round(dy*tileSize);
+    while(y<canvas.height) {
       ctx.moveTo(15, y);
       ctx.lineTo(40, y);
-      ctx.moveTo(this.canvas.width - 40, y);
-      ctx.lineTo(this.canvas.width - 15, y);
-      y+=this.tileSize;
+      ctx.moveTo(canvas.width - 40, y);
+      ctx.lineTo(canvas.width - 15, y);
+      y+=tileSize;
     }
     
     // draw
@@ -77,12 +67,37 @@ Game.addState('Editor', {
   resources: [
     
   ],
-  init: function() {
-    this.editor = new Editor();
+  init: function(callback) {
+    this.netEntity = new Game.Network(io.connect('/entities'));
+    this.netEditor = new Game.Network(io.connect('/editor'));
+
+    this.viewport = new Game.Viewport(document.getElementById('editor'));
+    var pos = this.viewport.position();
+    pos.m = true;
+    this.viewport.position(pos);
+
+    var panel = $('#panel');
+    this.editor = new Editor(this.viewport, panel, document.getElementById('overlay'));
+    
+    this._fps = panel.find('.fps');
+    this.frames = [];
+    this.last_fps = Math.round(Date.now()/500);
+
     ko.applyBindings(this.editor);
+
+    callback();
   },
-  update: function(dt) {
-    this.editor.update(dt);
+  update: function(dt, now) {
+    this.frames.push(dt);
+    var frame = Math.round(now/500);
+    if(frame > this.last_fps) {
+      var n=0, fs=this.frames, l=fs.length;
+      for(var i=0;i<l; n+=fs[i], i++);
+      this.frames = [];
+      this._fps.text(Math.round(100000*l/n)/100);
+      this.last_fps = frame;
+    }
+    this.viewport.draw();
   },
   destroy: function() {
     

@@ -1,6 +1,8 @@
 /**
  * Module dependencies.
  */
+var path = require('path')
+  , fs = require('fs');
 var express = require('express');
 
 var app = module.exports = express.createServer();
@@ -36,6 +38,14 @@ if(process.env.MONGOLAB_URI) {
     console.log('Connected to mongodb.');
   });
 }
+
+// load domain objects
+app.domain = {};
+var models = fs.readdirSync(path.join(__dirname, 'domain'));
+models.forEach(function(file) {
+  var model = require(path.join(__dirname, 'domain', file));
+  model(app.mongoose, app.domain);
+});
 
 // socket.io
 app.io = require('socket.io').listen(app);
@@ -93,5 +103,7 @@ require('./map-api/routes.js')(app);
 
 
 // GO !
-app.listen(process.env.PORT || 3000);
+app.listen(process.env.PORT || 3000, function() {
+  console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
+});
 

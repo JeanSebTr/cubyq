@@ -5,7 +5,6 @@ var ko;
 ko.bindingHandlers.resize = {
   init: function(element, valueAccessor) {
     var el = $(element);
-    console.log('INIT resize :', element);
     $(window).resize(function() {
       var value = valueAccessor()
         , object;
@@ -37,18 +36,33 @@ ko.bindingHandlers.resize = {
   }
 };
 
-ko.bindingHandlers.followSize = {
-  init: function(element, valueAccessor) {},
-  update: function(element, valueAccessor) {
-    var value = valueAccessor()
-      , object;
-    if(ko.isObservable(value)) {
-      object = value();
-    }
-    else {
-      object = value;
-    }
-    element.width = object.w || object.width || 0;
-    element.height = object.h || object.height || 0;
+ko.bindingHandlers.move = {
+  init: function(element, valueAccessor) {
+    var el = $(element)
+      , moving = false
+      , start = null
+      , iX = 0
+      , iY = 0;
+    
+    el.mousedown(function(e) {
+      var pos = valueAccessor()();
+      if(pos.m && !moving) {
+        start = pos;
+        iX = e.pageX;
+        iY = e.pageY;
+        moving = true;
+      }
+    });
+    el.mouseup(function(e) {
+      moving = false;
+    });
+    el.mousemove(function(e) {
+      if(moving) {
+        var pos = {m: start.m};
+        pos.x = start.x + (iX - e.pageX)/50;
+        pos.y = start.y + (iY - e.pageY)/50;
+        valueAccessor()(pos);
+      }
+    });
   }
 };

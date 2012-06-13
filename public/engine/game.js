@@ -7,7 +7,14 @@ var states = {}
   , currentState = null;
 
 // game loop
-var frameReq = null;
+var frameReq = null, t_last;
+function update(now) {
+  if(!now) now = Date.now();
+  var dt = now - t_last;
+  t_last = now;
+  window.requestAnimationFrame(update);
+  currentState.update.call(stateCtx, dt, now);
+}
 
 var need = [];
 
@@ -47,15 +54,25 @@ var Game = {
     var request = null;
     if(currentState.update) {
       request = function() {
-        
+        window.requestAnimationFrame(request);
+        currentState.up
       }
     }
     Game.Load(currentState.resources || [], null, function() {
-      
+      t_last = Date.now();
+      if(currentState.init) {
+        currentState.init.call(stateCtx, (currentState.update)?update.bind({}, Date.now()):undefined);
+      }
+      else if(currentState.update) {
+        update(Date.now());
+      }
     });
   },
   need: function(resource) {
     need.push(resource);
+  },
+  setIO: function(io) {
+    this.io = io;
   }
 };
 

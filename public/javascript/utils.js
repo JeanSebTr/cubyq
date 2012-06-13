@@ -21,38 +21,3 @@ FPS.prototype = {
     return Math.round((n + this.cpt)/j);
   }
 };
-
-ko.bindingHandlers.move = {
-  init: function(element, valueAccessor) {
-    var el = $(element)
-      , moving = false
-      , start = null
-      , iX = 0
-      , iY = 0;
-    
-    el.mousedown(function(e) {
-      var pos = valueAccessor()();
-      if(pos.m && !moving) {
-        start = pos;
-        iX = e.pageX;
-        iY = e.pageY;
-        moving = true;
-      }
-    });
-    el.mouseup(function(e) {
-      moving = false;
-    });
-    el.mousemove(function(e) {
-      if(moving) {
-        var pos = {m: start.m};
-        pos.x = start.x + (iX - e.pageX)/50;
-        pos.y = start.y + (iY - e.pageY)/50;
-        valueAccessor()(pos);
-      }
-    });
-  },
-  update: function(element, valueAccessor) {
-    
-  }
-};
-

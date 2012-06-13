@@ -4,11 +4,16 @@
     <title>Web Map Editor</title>
     <script src="/javascript/modernizr.js"></script>
     <script src="/javascript/knockout-2.1.0.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
     <script src="/javascript/bindings.js"></script>
+    <script src="/javascript/utils.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
     <script src="/engine/game.js"></script>
     <script src="/engine/load.js"></script>
+    <script src="/engine/network.js"></script>
+    <script src="/engine/viewport.js"></script>
     <script src="/game/editor.js"></script>
+    <script src="/polyfills/animationframe.js"></script>
     <script>
       $(function() {
         Game.init([
@@ -38,20 +43,27 @@
         bottom: 0;
         width: 250px;
       }
-      #editor {
+      #editor, #overlay {
         position: absolute;
-        top: 0;
+        top: 50;
         left: 0;
         bottom: 0;
+      }
+      #editor {
         background-image: url('./images/trans.png');
+        z-index: 10;
+      }
+      #overlay {
+        z-index: 20;
       }
     </style>
   </head>
   <body data-bind="resize: size">
     <div id="panel">
-      <p>Viewport : <strong data-bind=""></strong> , <strong data-bind=""></strong></p>
+      <p>Viewport : <strong data-bind="text: Math.round(viewport.position().x*100)/100"></strong> , <strong data-bind="text: Math.round(viewport.position().y*100)/100"></strong></p>
       <p>Rate : <span class="fps"></span> fps</p>
     </div>
-    <canvas id="editor" data-bind="followSize: {w: size().w-250, h: size().h}"></canvas>
+    <canvas id="editor" data-bind="attr: { height: (size().h || size().height)-50, width: (size().w || size().width)-250}"></canvas>
+    <canvas id="overlay" data-bind="move: viewport.position, attr: { height: (size().h || size().height)-50, width: (size().w || size().width)-250}"></canvas>
   </body>
 </html>
