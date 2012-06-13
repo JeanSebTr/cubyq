@@ -65,17 +65,28 @@
     <div id="panel">
       <p>Viewport : <strong data-bind="text: Math.round(viewport.position().x*100)/100"></strong> , <strong data-bind="text: Math.round(viewport.position().y*100)/100"></strong></p>
       <p>Rate : <span class="fps"></span> fps</p>
+      <fieldset>
+        <legend>Map</legend>
+        <select data-bind="value: currentMap, options: mapList, optionsText: 'name', optionsCaption: 'Map...'"></select>
+        <button data-bind="click: createMap.bind($data)">Nouvelle</button><br />
+        <label data-bind="if: currentMap">Nom : <input type="text" data-bind="value: currentMap().name" /></label>
+      </fieldset>
+      <div data-bind="if: currentMap">
+        <fieldset>
+          <legend>Layers</legend>
+          <select data-bind="value: currentMap, options: mapList, optionsText: 'name', optionsCaption: 'Layer...'"></select>
+        </fieldset>
+      </div>
     </div>
     <canvas id="editor" data-bind="attr: { height: (size().h || size().height)-50, width: (size().w || size().width)-250}"></canvas>
     <canvas id="overlay" data-bind="
       move: {coord: viewport.position, active: toolbar.move, step: viewport.tilesSize},
       select: {rect: selection, active: toolbar.select, step: viewport.tilesSize, convert: viewport.pxToCoord.bind(viewport)},
-      attr: { height: (size().h || size().height)-50, width: (size().w || size().width)-250}"></canvas>
+      attr: {height: (size().h || size().height)-50, width: (size().w || size().width)-250}"></canvas>
     <script>
       $(function() {
         Game.init([
           // resources
-          {type: 'script', file: '/game/editor.js'}
         ], function() {
           // progess
         }, function() {

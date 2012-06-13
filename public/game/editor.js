@@ -1,13 +1,23 @@
 var Game, ko;
 
-function Editor(viewport, panel, canvas) {
+function Editor(io, viewport, panel, canvas) {
   var self = this;
+  this.io = io;
 
   // an observable linking window and canvas size
-  this.size = ko.observable({w: 150, h: 150});
+  this.size = ko.observable({w: 150, h: 150}).extend({ throttle: 100 });
 
   //
   this.viewport = viewport;
+  this.mapList = ko.observableArray();
+  this.currentMap = ko.observable(null);
+  this.io.emit('listMaps', function(maps) {
+    maps.forEach(function(map) {
+      map.name = ko.observable(map.name || 'Untitled');
+      map.name.subscribe(self.renameMap.bind(self, map));
+    });
+    self.mapList(maps);
+  });
 
   // toolbar
   var maintool = ko.observable("move");
@@ -28,13 +38,25 @@ function Editor(viewport, panel, canvas) {
   this.selection.subscribe(this.drawOverlay.bind(this));
 }
 Editor.prototype = {
+  createMap: function() {
+    var self = this;
+    this.io.emit('createMap', function(map) {
+      map.name = ko.observable(map.name || 'Untitled');
+      map.name.subscribe(self.renameMap.bind(self, map));
+      self.mapList.push(map);
+      self.currentMap(map);
+    });
+  },
+  renameMap: function(map, name) {
+    this.io.emit('renameMap', {_id: map._id, name: name});
+  },
   drawOverlay: function() {
 
     var pos = this.viewport.position()
       , select = this.selection()
       , ctx = this.ctx
       , canvas = this.canvas
-      , tileSize = 50;
+      , tileSize = this.viewport.tilesSize;
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -65,10 +87,8 @@ Editor.prototype = {
     var dx = pos.x%1*-1
       , x = Math.round(dx*tileSize);
     while(x<canvas.width) {
-      ctx.moveTo(x, 15);
-      ctx.lineTo(x, 40);
-      ctx.moveTo(x, canvas.height - 40);
-      ctx.lineTo(x, canvas.height - 15);
+      ctx.moveTo(x, 0);
+      ctx.lineTo(x, 20);
       x+=tileSize;
     }
     
@@ -76,10 +96,8 @@ Editor.prototype = {
     var dy = pos.y%1*-1
       , y = Math.round(dy*tileSize);
     while(y<canvas.height) {
-      ctx.moveTo(15, y);
-      ctx.lineTo(40, y);
-      ctx.moveTo(canvas.width - 40, y);
-      ctx.lineTo(canvas.width - 15, y);
+      ctx.moveTo(0, y);
+      ctx.lineTo(20, y);
       y+=tileSize;
     }
     
@@ -94,21 +112,24 @@ Game.addState('Editor', {
     
   ],
   init: function(callback) {
+    var self = this;
     this.netEntity = new Game.Network(io.connect('/entities'));
-    this.netEditor = new Game.Network(io.connect('/editor'));
 
     this.viewport = new Game.Viewport(document.getElementById('editor'));
 
-    var panel = $('#panel');
-    this.editor = new Editor(this.viewport, panel, document.getElementById('overlay'));
-    
-    this._fps = panel.find('.fps');
-    this.frames = [];
-    this.last_fps = Math.round(Date.now()/500);
+    var panel = $('#panel')
+      , _io = io.connect('/editor');
+    _io.on('connect', function() {
+      self.editor = new Editor(_io, self.viewport, panel, document.getElementById('overlay'));
+      
+      self._fps = panel.find('.fps');
+      self.frames = [];
+      self.last_fps = Math.round(Date.now()/500);
 
-    ko.applyBindings(this.editor);
+      ko.applyBindings(self.editor);
 
-    callback();
+      callback();
+    });
   },
   update: function(dt, now) {
     this.frames.push(dt);
@@ -120,7 +141,7 @@ Game.addState('Editor', {
       this._fps.text(Math.round(100000*l/n)/100);
       this.last_fps = frame;
     }
-    this.viewport.draw();
+    //this.viewport.draw();
   },
   destroy: function() {
     

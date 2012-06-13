@@ -4,6 +4,7 @@ module.exports = function(mongoose, domain) {
 	if(!mongoose) {
 		return;
 	}
+  console.log('Load Map\'s models.');
 
 	var Schema = mongoose.Schema
   	, ObjectId = Schema.ObjectId;
@@ -13,11 +14,18 @@ module.exports = function(mongoose, domain) {
   });
   domain.Map = mongoose.model('Map', Map);
 
+  var MapLayer = new Schema({
+    map: {type: ObjectId, index: true},
+    name: String,
+    order: Number,
+    properties: [{name: String, value: String}]
+  });
+  domain.MapLayer = mongoose.model('MapLayer', MapLayer);
+
   var MapPart = new Schema({
-  	map: ObjectId,
-  	layer: Number,
+  	layer: ObjectId,
   	pos: {x: Number, y: Number},
-  	tiles: []
+  	tiles: [ObjectId]
   });
   MapPart.index({pos: "2d"}, {min: -10000, max: 10000 });
   domain.MapPart = mongoose.model('MapPart', MapPart);
@@ -34,7 +42,7 @@ module.exports = function(mongoose, domain) {
   	name: String,
   	witdh: Number,
   	height: Number,
-  	file: String,
+  	file: Buffer,
   	tiles: [ObjectId]
   });
   domain.TileSet = mongoose.model('TileSet', TileSet);

@@ -99,8 +99,10 @@ app.get('/', function(req, res) {
 app.get('/editor', function(req, res) {
   res.render('editor', {title: 'Live map editor', layout: false});
 });
-require('./map-api/routes.js')(app);
 
+
+// APIs on socket.io
+require('./map-api/editor.js')(app.io, app.domain);
 
 // GO !
 app.listen(process.env.PORT || 3000, function() {
