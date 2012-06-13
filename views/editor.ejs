@@ -14,19 +14,6 @@
     <script src="/engine/viewport.js"></script>
     <script src="/game/editor.js"></script>
     <script src="/polyfills/animationframe.js"></script>
-    <script>
-      $(function() {
-        Game.init([
-          // resources
-          {type: 'script', file: '/game/editor.js'}
-        ], function() {
-          // progess
-        }, function() {
-          // ready
-          Game.changeState('Editor');
-        });
-      });
-    </script>
     <style>
       html, body {
         height: 100%;
@@ -35,6 +22,13 @@
       html, body, canvas, div {
         margin: 0;
         padding: 0;
+      }
+      #toolbar {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 250px;
+        height: 50px;
       }
       #panel {
         position: absolute;
@@ -45,7 +39,7 @@
       }
       #editor, #overlay {
         position: absolute;
-        top: 50;
+        top: 50px;
         left: 0;
         bottom: 0;
       }
@@ -59,11 +53,36 @@
     </style>
   </head>
   <body data-bind="resize: size">
+    <div id="toolbar">
+      <label><input type="radio" name="mainTool" value="move" data-bind="checked: toolbar.maintool" />Déplacer</label>
+      <label>
+        <input type="radio" name="mainTool" value="select" data-bind="checked: toolbar.maintool" />Sélectionner
+        <span data-bind="if: selection">
+          (<em data-bind="text: '['+selection().x1+', '+selection().y1+'] ['+selection().x2+', '+selection().y2+']'"></em>)
+        </span>
+      </label>
+    </div>
     <div id="panel">
       <p>Viewport : <strong data-bind="text: Math.round(viewport.position().x*100)/100"></strong> , <strong data-bind="text: Math.round(viewport.position().y*100)/100"></strong></p>
       <p>Rate : <span class="fps"></span> fps</p>
     </div>
     <canvas id="editor" data-bind="attr: { height: (size().h || size().height)-50, width: (size().w || size().width)-250}"></canvas>
-    <canvas id="overlay" data-bind="move: viewport.position, attr: { height: (size().h || size().height)-50, width: (size().w || size().width)-250}"></canvas>
+    <canvas id="overlay" data-bind="
+      move: {coord: viewport.position, active: toolbar.move, step: viewport.tilesSize},
+      select: {rect: selection, active: toolbar.select, step: viewport.tilesSize, convert: viewport.pxToCoord.bind(viewport)},
+      attr: { height: (size().h || size().height)-50, width: (size().w || size().width)-250}"></canvas>
+    <script>
+      $(function() {
+        Game.init([
+          // resources
+          {type: 'script', file: '/game/editor.js'}
+        ], function() {
+          // progess
+        }, function() {
+          // ready
+          Game.changeState('Editor');
+        });
+      });
+    </script>
   </body>
 </html>

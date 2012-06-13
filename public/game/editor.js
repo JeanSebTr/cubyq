@@ -9,18 +9,29 @@ function Editor(viewport, panel, canvas) {
   //
   this.viewport = viewport;
 
+  // toolbar
+  var maintool = ko.observable("move");
+  this.toolbar = {
+    maintool: maintool,
+    move: ko.computed(function(){ return (maintool() == 'move') }),
+    select: ko.computed(function(){ return (maintool() == 'select') })
+  };
+
   // overlay
   this.canvas = canvas;
   this.ctx = canvas.getContext('2d');
-  this.drawOverlay();
-  this.viewport.position.subscribe(function(val) {
-    self.drawOverlay();
+  this.viewport.position.subscribe(this.drawOverlay.bind(this));
+  this.size.subscribe(function() {
+    setTimeout(self.drawOverlay.bind(self), 10);
   });
+  this.selection = ko.observable(false);
+  this.selection.subscribe(this.drawOverlay.bind(this));
 }
 Editor.prototype = {
   drawOverlay: function() {
 
     var pos = this.viewport.position()
+      , select = this.selection()
       , ctx = this.ctx
       , canvas = this.canvas
       , tileSize = 50;
@@ -28,10 +39,25 @@ Editor.prototype = {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     ctx.save();
+    ctx.lineWidth = 2;
+
+    // selection zone
+    if(select) {
+      var start = this.viewport.coordToPx(select.x1, select.y1)
+        , end = this.viewport.coordToPx(select.x2, select.y2);
+      ctx.strokeStyle = '#0000FF';
+      ctx.fillStyle = 'rgba(0, 0, 255, 0.4)';
+      ctx.beginPath();
+      ctx.moveTo(start.x, start.y);
+      ctx.lineTo(start.x, end.y);
+      ctx.lineTo(end.x, end.y);
+      ctx.lineTo(end.x, start.y);
+      ctx.closePath();
+      ctx.stroke();
+      ctx.fill();
+    }
     
     // prepare style
-    ctx.lineWidth = 2;
-    ctx.lineCap = 1;
     ctx.strokeStyle = '#FF0000';
     ctx.beginPath();
     
@@ -72,9 +98,6 @@ Game.addState('Editor', {
     this.netEditor = new Game.Network(io.connect('/editor'));
 
     this.viewport = new Game.Viewport(document.getElementById('editor'));
-    var pos = this.viewport.position();
-    pos.m = true;
-    this.viewport.position(pos);
 
     var panel = $('#panel');
     this.editor = new Editor(this.viewport, panel, document.getElementById('overlay'));
