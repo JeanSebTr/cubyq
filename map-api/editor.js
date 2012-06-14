@@ -67,13 +67,14 @@ module.exports = function(io) {
 			
 		}
 	};
+
 	io.on('connection', function(socket) {
 		// proxy to authenticate user
 		function auth(method) {
 			var socket = this// socket
 				, args = Array.prototype.slice.call(arguments, 1);
 
-			// do authentification
+			//TODO: authentification
 
 			// call method
 			ioMethods[method].apply(socket, args);

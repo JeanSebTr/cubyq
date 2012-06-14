@@ -2,14 +2,14 @@
 var mongoose = require('mongoose');
 var MapLayer = mongoose.model('MapLayer');
 
-module.exports = function(io, domain) {
+module.exports = function(io) {
 
 	var ioMethods = {
 		listLayers: function(mapId, cb) {
 			console.log('listLayers', mapId);
 			MapLayer.find({map: mapId}, function(err, layers) {
 				if(err) {
-					console.log('Can\' get layers for map ', mapId, err);
+					console.log("Can't get layers for map ", mapId, err);
 					cb([]);
 				}
 				else {

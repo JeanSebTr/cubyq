@@ -48,7 +48,6 @@ module.exports = function(app, express, io){
         io.set('store', new RedisStore({redisPub:pub, redisSub:sub, redisClient:store}));
         io.set('log level', 2);
 
-        console.log(mongooseAuth.middleware);
         app.use(mongooseAuth.middleware());
     });
 
@@ -60,4 +59,6 @@ module.exports = function(app, express, io){
         app.use(express.errorHandler()); 
         io.set('log level', 1);
     });
+
+    mongooseAuth.helpExpress(app);
 };
