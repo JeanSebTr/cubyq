@@ -17,7 +17,7 @@ module.exports = function(mongoose, domain) {
   var MapLayer = new Schema({
     map: {type: ObjectId, index: true},
     name: String,
-    order: Number,
+    order: {type: Number, default: 0},
     properties: [{name: String, value: String}]
   });
   domain.MapLayer = mongoose.model('MapLayer', MapLayer);

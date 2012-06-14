@@ -2,10 +2,36 @@
 var Game;
 (function() {
 
-function World() {
+function World(id, provider) {
+  self = this;
+
+  this.id = id;
+  this.provider = provider;
+  provider.joinMap(id);
+
+  this.layers = ko.observableArray();
+  this.limits = ko.observable({
+    x: 0, y: 0, w: 0, h: 0
+  });
+
+  provider.listLayers(id, function(layers) {
+    console.log('Layers listed for', id, ':', layers);
+    var res = [];
+    layers.forEach(function(layer) {
+      res.push(new Game.Layer(layer, self));
+    });
+    self.layers(res.sort(self.sortLayers));
+  });
+  provider.io.on('layerCreated', function(layer) {
+    console.log(['layerCreated :', layer]);
+    var res = self.layers();
+    res.push(new Game.Layer(layer, self));
+    self.layers(res.sort(self.sortLayers));
+  });
+
   this.isUpdating = false;
   this.entities = [];
-  this.deferedEntities = []; // 
+  this.deferedEntities = [];
 }
 World.prototype = {
   addEntity: function(entity) {
@@ -35,6 +61,12 @@ World.prototype = {
         
       }
     }
+  },
+  sortLayers: function(a, b) {
+    return a.z - b.z;
+  },
+  setLimit: function(x, y, w, h) {
+    this.limits({x: x, y: y, w: w, h: h});
   }
 };
 

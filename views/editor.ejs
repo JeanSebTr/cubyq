@@ -12,7 +12,10 @@
     <script src="/engine/load.js"></script>
     <script src="/engine/network.js"></script>
     <script src="/engine/viewport.js"></script>
+    <script src="/engine/world.js"></script>
+    <script src="/engine/layer.js"></script>
     <script src="/game/editor.js"></script>
+    <script src="/game/tilesets-editor.js"></script>
     <script src="/polyfills/animationframe.js"></script>
     <style>
       html, body {
@@ -50,20 +53,47 @@
       #overlay {
         z-index: 20;
       }
+      #tilesets {
+        position: absolute;
+        top: 0;
+        right: 25%;
+        width: 50%;
+        height: 90%;
+        overflow: auto;
+        border: 1px solid black;
+        z-index: 100;
+        background-color: white;
+      }
     </style>
   </head>
-  <body data-bind="resize: size">
+  <body data-bind="resize: viewport.size">
     <div id="toolbar">
-      <label><input type="radio" name="mainTool" value="move" data-bind="checked: toolbar.maintool" />Déplacer</label>
-      <label>
-        <input type="radio" name="mainTool" value="select" data-bind="checked: toolbar.maintool" />Sélectionner
-        <span data-bind="if: selection">
-          (<em data-bind="text: '['+selection().x1+', '+selection().y1+'] ['+selection().x2+', '+selection().y2+']'"></em>)
-        </span>
-      </label>
+      <p style="width: 375px; display: inline-block;">
+        <label><input type="radio" name="mainTool" value="move" data-bind="checked: toolbar.maintool" />Déplacer</label>
+        <label><input type="radio" name="mainTool" value="draw" data-bind="checked: toolbar.maintool" />Dessiner</label>
+        <label>
+          <input type="radio" name="mainTool" value="select" data-bind="checked: toolbar.maintool" />Sélectionner
+          <span data-bind="if: selection">
+            (<em data-bind="text: '['+selection().x1+', '+selection().y1+'] ['+selection().x2+', '+selection().y2+']'"></em>)
+          </span>
+        </label>
+      </p>
+      <p data-bind="with: tilesets.current" style="display: inline-block;">
+        <img data-bind="attr: {src: '/tilesets/'+id+'.png', width: viewport.tilesSize, height: viewport.tilesSize}" />
+      </p>
+      <p style="display: inline-block;">
+        <button data-bind="click: tilesets.show.bind(tilesets, true)">Tiles</button>
+      </p>
+    </div>
+    <div data-bind="with: tilesets">
+      <div id="tilesets" data-bind="visible: show">
+        <select data-bind="value: list"></select>
+        <form enctype="multipart/form-data">
+        </form>
+      </div>
     </div>
     <div id="panel">
-      <p>Viewport : <strong data-bind="text: Math.round(viewport.position().x*100)/100"></strong> , <strong data-bind="text: Math.round(viewport.position().y*100)/100"></strong></p>
+      <p>Viewport : <input type="text" data-bind="value: viewport.position.x" size="6" />, <input type="text" data-bind="value: viewport.position.y" size="6" /></p>
       <p>Rate : <span class="fps"></span> fps</p>
       <fieldset>
         <legend>Map</legend>
@@ -74,15 +104,22 @@
       <div data-bind="if: currentMap">
         <fieldset>
           <legend>Layers</legend>
-          <select data-bind="value: currentMap, options: mapList, optionsText: 'name', optionsCaption: 'Layer...'"></select>
+          <select data-bind="value: currentLayer, options: viewport.world().layers, optionsText: function(layer) { return '['+layer.z+'] '+layer.name(); }"
+            size="5" multiple="true" style="width: 120px;"></select>
+          <p style="display: inline-block;">
+            <button data-bind="click: createLayer.bind($data)">Nouveau</button><br />
+            <button data-bind="click: upLayer.bind($data)">Monter</button><br />
+            <button data-bind="click: downLayer.bind($data)">Descendre</button><br />
+          </p>
+            <label data-bind="if: currentLayer">Nom : <input type="text" data-bind="value: currentLayer().name" /></label>
         </fieldset>
       </div>
     </div>
-    <canvas id="editor" data-bind="attr: { height: (size().h || size().height)-50, width: (size().w || size().width)-250}"></canvas>
+    <canvas id="editor" data-bind="attr: { height: viewport.size().h-50, width: viewport.size().w-250}"></canvas>
     <canvas id="overlay" data-bind="
       move: {coord: viewport.position, active: toolbar.move, step: viewport.tilesSize},
       select: {rect: selection, active: toolbar.select, step: viewport.tilesSize, convert: viewport.pxToCoord.bind(viewport)},
-      attr: {height: (size().h || size().height)-50, width: (size().w || size().width)-250}"></canvas>
+      attr: {height: viewport.size().h-50, width: viewport.size().w-250}"></canvas>
     <script>
       $(function() {
         Game.init([

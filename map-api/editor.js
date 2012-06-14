@@ -1,21 +1,23 @@
 
 module.exports = function(io, domain) {
-	var nsp = io.of('/editor');
 
 	var ioMethods = {
+		// map methods
 		createMap: function() {
 			if(!arguments.length) return;
 			var cb = Array.prototype.slice.call(arguments, -1)[0];
 			if(typeof cb != 'function') return;
-			var map = new domain.Map();
+
+			var socket = this
+				, map = new domain.Map();
 			map.name = 'Untitled';
 			map.save(function(err) {
-				cb(map.toObject());
+				var m = map.toObject();
+				socket.broadcast.emit('mapCreated', m);
+				cb(m);
 			});
 		},
 		renameMap: function(data) {
-			console.log('renameMap :', arguments);
-			if(!data) return;
 			domain.Map.update({_id: data._id}, {name: data.name},
 				function(err, nb) {
 					if(err || !nb) {
@@ -38,9 +40,30 @@ module.exports = function(io, domain) {
 					cb(res);
 				}
 			});
+		},
+		// layer methods
+		createLayer: function(mapId) {
+			console.log('Create layer for map ', mapId);
+			var layer = new domain.MapLayer();
+			layer.map = mapId;
+			layer.name = 'Untitled';
+			layer.save(function(err) {
+				io.sockets.in(mapId).emit('layerCreated', layer);
+			});
+		},
+		renameLayer: function(data) {
+			domain.MapLayer.update({_id: data._id}, {name: data.name},
+				function(err, nb) {
+					if(err || !nb) {
+						console.log('Layer not renamed :', arguments);
+					}
+				});
+		},
+		listTilesets: function() {
+			
 		}
 	};
-	nsp.on('connection', function(socket) {
+	io.on('connection', function(socket) {
 		// proxy to authenticate user
 		function auth(method) {
 			var socket = this// socket

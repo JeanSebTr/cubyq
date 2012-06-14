@@ -46,7 +46,10 @@ ko.bindingHandlers.move = {
       , iY = 0;
     
     el.mousedown(function(e) {
-      var pos = params.coord();
+      var pos = {
+        x: params.coord.x()*1 || 0,
+        y: params.coord.y()*1 || 0
+      };
 
       if(params.active() && !moving) {
         start = pos;
@@ -60,10 +63,8 @@ ko.bindingHandlers.move = {
     });
     el.mousemove(function(e) {
       if(moving) {
-        params.coord({
-          x: start.x + (iX - e.pageX)/params.step,
-          y: start.y + (iY - e.pageY)/params.step
-        });
+        params.coord.x(start.x + (iX - e.pageX)/params.step);
+        params.coord.y(start.y + (iY - e.pageY)/params.step);
       }
     });
   }
@@ -82,6 +83,16 @@ ko.bindingHandlers.select = {
           x2: Math.round(end.x),
           y2: Math.round(end.y)
         };
+      if(res.x1 > res.x2) {
+        var x = res.x1;
+        res.x1 = res.x2;
+        res.x2 = x;
+      }
+      if(res.y1 > res.y2) {
+        var y = res.y1;
+        res.y1 = res.y2;
+        res.y2 = y;
+      }
       if(res.x1 == res.x2 || res.y1 == res.y2) {
         params.rect(false);
       }

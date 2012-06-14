@@ -13,13 +13,17 @@ function Viewport(canvas) {
 	this.canvas = canvas;
 	this.tilesSize = 32;
 
-	this.mapObj = ko.observable(null);
+	this.world = ko.observable(null);
 
-	this.position = ko.observable({x: 0, y: 0});
-	this.position.subscribe(function(val) {
-		self.pos = val; // need freaking fast access to this value
-	});
-	this.pos = this.position();
+	this.size = ko.observable({w: 150, h: 150}).extend({ throttle: 100 });
+	this.position = {
+		x: ko.observable(0),
+		y: ko.observable(0)
+	};
+	// need freaking fast access to those values
+	this.comPos = ko.computed(function() { return {x: self.position.x(), y: self.position.y()}; });
+	this.comPos.subscribe(function(val){self.pos = val;});
+	this.pos = this.comPos();
 }
 
 Viewport.prototype = {
@@ -35,24 +39,24 @@ Viewport.prototype = {
 			y: (y - this.pos.y)*this.tilesSize
 		};
 	},
+	pause: function(pause) {
+		// this. // TODO ?
+	},
+	setWorld: function(world) {
+		this.loading = true;
+		this.world(world);
+	},
 	track: function(entity) {
 		this.trackEntity = entity;
 	},
 	update: function() {
-
-		// entity tracking
-		if(true) {
-
-		}
+		// TODO : track entity
 	},
   contains: function(entity) {
     
   },
   drawWorld: function() {
     
-  },
-  drawEntity: function(entity) {
-
   }
 };
 

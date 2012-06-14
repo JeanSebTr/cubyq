@@ -4,19 +4,42 @@ function Editor(io, viewport, panel, canvas) {
   var self = this;
   this.io = io;
 
-  // an observable linking window and canvas size
-  this.size = ko.observable({w: 150, h: 150}).extend({ throttle: 100 });
+  this.tilesets = new TilesetsEditor(io);
 
-  //
+  // map and viewport
   this.viewport = viewport;
   this.mapList = ko.observableArray();
   this.currentMap = ko.observable(null);
+  this.currentLayer = ko.observable(null);
+  var renaming;
+  this.currentLayer.subscribe(function(layer) {
+    if(renaming) {
+      renaming.dispose();
+      renaming = null;
+    }
+    if(!layer) return;
+    renaming = layer.name.subscribe(self.renameLayer.bind(self, layer.id));
+  });
   this.io.emit('listMaps', function(maps) {
     maps.forEach(function(map) {
       map.name = ko.observable(map.name || 'Untitled');
       map.name.subscribe(self.renameMap.bind(self, map));
     });
     self.mapList(maps);
+  });
+  this.io.on('mapCreated', function(map) {
+      map.name = ko.observable(map.name || 'Untitled');
+      map.name.subscribe(self.renameMap.bind(self, map));
+      self.mapList.push(map);
+  });
+  this.currentMap.subscribe(function(map) {
+    if(!map) {
+      self.viewport.setWorld(null);
+    }
+    else {
+      var world = new Game.World(map._id, self.gameNet);
+      self.viewport.setWorld(world);
+    }
   });
 
   // toolbar
@@ -30,14 +53,16 @@ function Editor(io, viewport, panel, canvas) {
   // overlay
   this.canvas = canvas;
   this.ctx = canvas.getContext('2d');
-  this.viewport.position.subscribe(this.drawOverlay.bind(this));
-  this.size.subscribe(function() {
+  this.viewport.position.x.subscribe(this.drawOverlay.bind(this));
+  this.viewport.position.y.subscribe(this.drawOverlay.bind(this));
+  this.viewport.size.subscribe(function() {
     setTimeout(self.drawOverlay.bind(self), 10);
   });
   this.selection = ko.observable(false);
   this.selection.subscribe(this.drawOverlay.bind(this));
 }
 Editor.prototype = {
+  // map
   createMap: function() {
     var self = this;
     this.io.emit('createMap', function(map) {
@@ -50,9 +75,23 @@ Editor.prototype = {
   renameMap: function(map, name) {
     this.io.emit('renameMap', {_id: map._id, name: name});
   },
+  // layers
+  createLayer: function() {
+    var map = this.currentMap();
+    this.io.emit('createLayer', map._id);
+  },
+  renameLayer: function(id, name) {
+    this.io.emit('renameLayer', {_id: id, name: name});
+  },
+  upLayer: function() {
+    //
+  },
+  downLayer: function() {
+    //
+  },
   drawOverlay: function() {
 
-    var pos = this.viewport.position()
+    var pos = this.viewport.comPos()
       , select = this.selection()
       , ctx = this.ctx
       , canvas = this.canvas
@@ -104,6 +143,9 @@ Editor.prototype = {
     // draw
     ctx.stroke();
     ctx.restore();
+  },
+  setGameNetwork: function(net) {
+    this.gameNet = net;
   }
 };
 
@@ -112,16 +154,16 @@ Game.addState('Editor', {
     
   ],
   init: function(callback) {
-    var self = this;
-    this.netEntity = new Game.Network(io.connect('/entities'));
+    var self = this
+      , _io = io.connect();
+    var net = new Game.Network(_io);
 
     this.viewport = new Game.Viewport(document.getElementById('editor'));
 
-    var panel = $('#panel')
-      , _io = io.connect('/editor');
+    var panel = $('#panel');
     _io.on('connect', function() {
       self.editor = new Editor(_io, self.viewport, panel, document.getElementById('overlay'));
-      
+      self.editor.setGameNetwork(net);
       self._fps = panel.find('.fps');
       self.frames = [];
       self.last_fps = Math.round(Date.now()/500);

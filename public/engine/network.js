@@ -5,12 +5,16 @@ var Game;
 
 function Network(io) {
 	this.io = io;
-	this.world = null;
 }
 
 Network.prototype = {
-	setWorld: function(world) {
-		this.world = 0;
+	listLayers: function(id, cb) {
+		this.io.emit('listLayers', id, function(layers) {
+			cb(layers);
+		});
+	},
+	joinMap: function(id) {
+		this.io.emit('joinMap', id);
 	}
 };
 

@@ -102,6 +102,7 @@ app.get('/editor', function(req, res) {
 
 
 // APIs on socket.io
+require('./map-api/game.js')(app.io, app.domain);
 require('./map-api/editor.js')(app.io, app.domain);
 
 // GO !
