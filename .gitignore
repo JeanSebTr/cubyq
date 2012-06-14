@@ -13,5 +13,11 @@ results
 
 node_modules
 npm-debug.log
+<<<<<<< HEAD
 
 .env
+=======
+.env
+
+.nfs*
+>>>>>>> ab458f3554298dc178ab7c277b9705bacd4619ac

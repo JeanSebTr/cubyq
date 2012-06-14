@@ -5,12 +5,11 @@
     "dependencies": {
         "express": "2.5.0",
         "stylus": "0.27.1",
-        "ejs": "0.9.6",
+        "ejs": ">= 0.0.1",
         "socket.io": "latest",
         "mongoose": ">= 2.6.4",
         "mongoose-auth": ">= 0.0.12",
-        "everyauth": ">= 0.2.32",
-        "connect-redis": ">= 1.3.0",
+        "everyauth": ">= 0.2.32"
     },
     "engines": {
         "node": ">= 0.6.x",
