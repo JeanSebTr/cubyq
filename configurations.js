@@ -41,7 +41,6 @@ module.exports = function(app, express, io){
         io.set("polling duration", 10);
         io.set('store', new RedisStore({redisPub:pub, redisSub:sub, redisClient:store}));
 
-        console.log(mongooseAuth.middleware);
         app.use(mongooseAuth.middleware());
     });
 
@@ -53,4 +52,6 @@ module.exports = function(app, express, io){
         app.use(express.errorHandler()); 
         io.set('log level', 1);
     });
+
+    mongooseAuth.helpExpress(app);
 };

@@ -7,7 +7,33 @@ var DefaultController = (function(){
     //public
     return {
         index: function(req, res){
-            res.render('index');
+            if(req.loggedIn){
+                res.redirect('/game');
+            }
+            else{
+                res.render('index');
+            }
+        },
+
+        login: function(req, res){
+            if(req.loggedIn){
+                res.logout();
+            }
+            else{
+                res.redirect('/auth/facebook');
+            }
+        },
+
+        logout: function(req, res){
+            if(req.loggedIn){
+                res.
+            }
+            res.redirect('/');
+            
+        },
+
+        game: function(req, res){
+            res.render('game');
         }
     };
 })();
