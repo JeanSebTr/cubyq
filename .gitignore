@@ -16,6 +16,7 @@ node_modules
 npm-debug.log
 
 .env
+config.env
 .nfs*
 
 public/deps.js
