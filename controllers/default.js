@@ -10,6 +10,10 @@ var DefaultController = (function(){
             res.render('index');
         },
 
+        release: function(req, res){
+            res.render('release');
+        },
+
         login: function(req, res){
             if(req.loggedIn){
                 res.logout();

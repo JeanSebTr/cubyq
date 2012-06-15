@@ -19,4 +19,5 @@ npm-debug.log
 .nfs*
 
 public/deps.js
+public/compiled.js
 vendor/

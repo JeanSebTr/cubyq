@@ -17,6 +17,7 @@ module.exports = function(app, io){
 
     //Game
     app.get('/', DefaultController.index);
+    app.get('/release', DefaultController.release);
     app.get('/login', DefaultController.login);
     app.get('/logout', DefaultController.logout);
 
