@@ -29,7 +29,7 @@ var DefaultController = (function(){
                 res.logout();
             }
             else {
-              res.redirect('/');
+                res.redirect('/');
             }
             
         },

@@ -33,7 +33,7 @@ module.exports = function(app, express, io){
         app.set('views', __dirname + '/views');
         app.set('view engine', 'ejs');
         app.set('view options', { layout: false });
-        app.use(express.bodyParser());
+        app.use(express.bodyParser({ keepExtensions: true, uploadDir: __dirname + "/upload" }));
         app.use(express.methodOverride());
         app.use(express.cookieParser());
         app.use(express.session({ secret: process.env.APP_SECRET }));

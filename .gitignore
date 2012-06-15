@@ -20,3 +20,9 @@ npm-debug.log
 
 public/deps.js
 vendor/
+
+public/tilesets/*
+!public/tilesets/empty
+
+upload/*
+!upload/empty

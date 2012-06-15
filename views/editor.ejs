@@ -90,12 +90,18 @@
         <div>
           <strong>Ajouter un tileset :</strong>
           <form enctype="multipart/form-data" data-bind="submit: uploadTile" style="display: inline-block;">
-          <label>Nom :<input name="name" type="text" /></label>
-          <input type="file" name="tileset" />
-          <input type="submit" value="Ajouter" />
+            <label>Nom :<input name="name" type="text" /></label>
+            <input type="file" name="tileset" />
+            <input type="submit" value="Ajouter" />
           </form>
         </div>
-        <select data-bind="value: list"></select>
+        <label>Tilesets :<select data-bind="value: current, options: list"></select></label>
+        <div data-bind="with: current">
+          <strong>Modifier :</strong>
+          <form enctype="multipart/form-data" data-bind="submit: uploadTile" style="display: inline-block;">
+          </form>
+        </div>
+        
         
             
             
