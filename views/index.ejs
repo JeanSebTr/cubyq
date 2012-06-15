@@ -7,6 +7,8 @@
     <script>
       goog.require('GameEngine');
     </script>
+
+    <script src="/socket.io/socket.io.js"></script>
 <% } %>
 </head>
 <body>
@@ -19,6 +21,29 @@
     <script type="text/javascript">
       var Game = new GameEngine();
       Game.init('canvas');
+    </script>
+
+    <script>
+        var socket = io.connect('/');
+
+        socket.on('connect', function (data) {
+            console.log('connect.... i\m about to join a room');
+        });
+
+        socket.on('console', function(data){
+            console.log(data); 
+        });
+
+        socket.on('player-connected', function(data){
+            console.log('player-connected');
+            console.log(data); 
+        });
+
+        socket.on('player-update', function(data){
+            console.log('player-update');
+            console.log(data);
+        });
+
     </script>
 <% }else { %>
     <h1>Splash Screen / Loading screen</h1>
