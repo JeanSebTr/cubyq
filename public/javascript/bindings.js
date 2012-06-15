@@ -122,3 +122,11 @@ ko.bindingHandlers.select = {
     });
   }
 };
+
+ko.bindingHandlers.tileset = {
+  init: function(element, valueAccessor) {
+    var editor = valueAccessor();
+    console.log(editor);
+    editor.setTileZone(element);
+  }
+};
