@@ -3,8 +3,8 @@
   --root=./vendor/closure-library/ \
   --root=./public/ \
   --root=./lib/ \
-  --namespace="Game" \
+  --namespace="GameEngine" \
   --output_mode=compiled \
-  --compiler_jar=./vendor/compiler/compiler.jar \
+  --compiler_jar=./vendor/closure-compiler/compiler.jar \
   --compiler_flags="--compilation_level=ADVANCED_OPTIMIZATIONS" \
   > ./public/compiled.js
