@@ -26,9 +26,11 @@ var DefaultController = (function(){
 
         logout: function(req, res){
             if(req.loggedIn){
-                res.
+                res.logout();
             }
-            res.redirect('/');
+            else {
+              res.redirect('/');
+            }
             
         },
 
