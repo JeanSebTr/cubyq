@@ -87,9 +87,20 @@
     </div>
     <div data-bind="with: tilesets">
       <div id="tilesets" data-bind="visible: show">
+        <div>
+          <strong>Ajouter un tileset :</strong>
+          <form enctype="multipart/form-data" data-bind="submit: uploadTile" style="display: inline-block;">
+          <label>Nom :<input name="name" type="text" /></label>
+          <input type="file" name="tileset" />
+          <input type="submit" value="Ajouter" />
+          </form>
+        </div>
         <select data-bind="value: list"></select>
-        <form enctype="multipart/form-data">
+        
+            
+            
         </form>
+        <button data-bind="click: show.bind(tilesets, false)">Fermer</button>
       </div>
     </div>
     <div id="panel">

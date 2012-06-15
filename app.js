@@ -19,10 +19,11 @@ models.forEach(function(file) {
 require('./configurations.js')(app, express, io);
 
 // APIs on socket.io
+require('./map-api/base.js')(io);
 require('./map-api/game.js')(io);
 require('./map-api/editor.js')(io);
 
-require('./routes.js')(app);
+require('./routes.js')(app, io);
 require('./socketsHandler.js')(io);
 
 // GO !

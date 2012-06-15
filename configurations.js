@@ -14,9 +14,15 @@ sub.on("error", emptyErrorCallback);
 store.on("error", emptyErrorCallback);
 
 if(redisToGoUrl.auth){
-    pub.auth(redisToGoUrl.auth.split(":")[1], emptyErrorCallback);
-    sub.auth(redisToGoUrl.auth.split(":")[1], emptyErrorCallback);
-    store.auth(redisToGoUrl.auth.split(":")[1], emptyErrorCallback);   
+    pub.auth(redisToGoUrl.auth.split(":")[1], function() {
+        console.log('Redis pub connected.');
+    });
+    sub.auth(redisToGoUrl.auth.split(":")[1], function() {
+        console.log('Redis sub connected.');
+    });
+    store.auth(redisToGoUrl.auth.split(":")[1], function() {
+        console.log('Redis store connected.');
+    });   
 }
 
 var RedisStore = require('socket.io/lib/stores/redis');
@@ -42,8 +48,8 @@ module.exports = function(app, express, io){
         io.set("transports", ["xhr-polling"]); 
         io.set("polling duration", 10);
         io.set('store', new RedisStore({redisPub:pub, redisSub:sub, redisClient:store}));
+        io.set('log level', 2);
 
-        console.log(mongooseAuth.middleware);
         app.use(mongooseAuth.middleware());
     });
 
@@ -55,4 +61,6 @@ module.exports = function(app, express, io){
         app.use(express.errorHandler()); 
         io.set('log level', 1);
     });
+
+    mongooseAuth.helpExpress(app);
 };
