@@ -66,6 +66,9 @@ module.exports = function(io) {
 		listTilesets: function(cb) {
 			Tileset.find({}, ['name', 'width', 'tiles'], function(err, tilesets) {
 				var res = [];
+				if(err || !tilesets) {
+					return cb(res);
+				}
 				tilesets.forEach(function(tileset) {
 					this.push({
 						id: tileset._id.toString(),
