@@ -5,7 +5,7 @@ var mongooseAuth = require('mongoose-auth');
 var db = mongoose.connection;
 var Schema = mongoose.Schema;
 var UserModel;
-var ScoreModel = mongoose.model('Score');
+var ScoreModel = require('./score.js');
 
 var UserSchema = new Schema({
     scores: [ScoreModel]
