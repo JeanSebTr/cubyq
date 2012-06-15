@@ -25,7 +25,14 @@ var DefaultController = (function(){
             if(req.loggedIn){
                 res.logout();
             }
-            res.redirect('/');
+            else {
+                res.redirect('/');
+            }
+            
+        },
+
+        game: function(req, res){
+            res.render('game');
         }
     };
 })();
