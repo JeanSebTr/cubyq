@@ -21,3 +21,9 @@ npm-debug.log
 public/deps.js
 public/compiled.js
 vendor/
+
+public/tilesets/*
+!public/tilesets/empty
+
+upload/*
+!upload/empty
