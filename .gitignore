@@ -27,3 +27,5 @@ public/tilesets/*
 
 upload/*
 !upload/empty
+
+vendor/closure-library
