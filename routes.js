@@ -3,15 +3,6 @@ var DefaultController = require("./controllers/default.js");
 var ScoresController = require("./controllers/scores.js");
 var EditorController = require("./controllers/editor.js");
 
-var Secure = function(req, res, next){
-    if(req.loggedIn){
-        next();
-    }
-    else{
-        res.redirect('/');
-    }
-}
-
 module.exports = function(app, io){
     var UploadTileController = require('./controllers/uploadTile.js')(io);
 

@@ -1,5 +1,5 @@
 
-redis = require('socket.io/node_modules/redis');
+var redis = require('socket.io/node_modules/redis');
 
 var redisToGoUrl   = require("url").parse(process.env.REDISTOGO_URL);
 
