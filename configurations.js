@@ -39,6 +39,8 @@ module.exports = function(app, express, io){
         app.use(express.session({ secret: process.env.APP_SECRET }));
         app.use(require('stylus').middleware({ src: __dirname + '/public' }));
         app.use(express.static(__dirname + '/public'));
+        app.use('/vendor', express.static(__dirname + '/vendor/closure-library/closure/goog'));
+        app.use('/lib', express.static(__dirname + '/lib'));
 
         io.enable('browser client minification');
         io.enable('browser client etag');

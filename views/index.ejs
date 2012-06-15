@@ -1,8 +1,23 @@
 <!doctype html>
 <html>
-    <head>
-    </head>
-    <body>
-    <a href="/login">Login Facebook</a>
-    </body>
+<head>
+
+<script src="/vendor/base.js"></script>
+<script src="/deps.js"></script>
+<script>
+  goog.require('GameEngine');
+</script>
+
+</head>
+<body>
+
+
+<canvas id="canvas" width="800" height="600"></canvas>
+<script type="text/javascript">
+  var Game = new GameEngine();
+  Game.init('canvas');
+</script>
+
+
+</body>
 </html>
