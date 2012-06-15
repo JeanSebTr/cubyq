@@ -2,6 +2,7 @@
 var mongoose = require('mongoose');
 var Map = mongoose.model('Map');
 var MapLayer = mongoose.model('MapLayer');
+var Tileset = mongoose.model('TileSet');
 
 module.exports = function(io) {
 
@@ -47,7 +48,6 @@ module.exports = function(io) {
 		},
 		// layer methods
 		createLayer: function(mapId) {
-			console.log('Create layer for map ', mapId);
 			var layer = new MapLayer();
 			layer.map = mapId;
 			layer.name = 'Untitled';
@@ -63,8 +63,22 @@ module.exports = function(io) {
 					}
 				});
 		},
-		listTilesets: function() {
-			
+		listTilesets: function(cb) {
+			Tileset.find({}, ['name', 'width', 'tiles'], function(err, tilesets) {
+				var res = [];
+				if(err || !tilesets) {
+					return cb(res);
+				}
+				tilesets.forEach(function(tileset) {
+					this.push({
+						id: tileset._id.toString(),
+						name: tileset.name,
+						width: tileset.width,
+						tiles: tileset.tiles
+					});
+				}, res);
+				cb(res);
+			});
 		}
 	};
 

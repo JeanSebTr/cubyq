@@ -122,3 +122,65 @@ ko.bindingHandlers.select = {
     });
   }
 };
+
+ko.bindingHandlers.draw = {
+  init: function(element, valueAccessor) {
+    var params = valueAccessor()
+      , el = $(element)
+      , drawing = false
+      , last;
+    function save() {
+      var res = {
+          x1: Math.round(start.x),
+          y1: Math.round(start.y),
+          x2: Math.round(end.x),
+          y2: Math.round(end.y)
+        };
+      if(res.x1 > res.x2) {
+        var x = res.x1;
+        res.x1 = res.x2;
+        res.x2 = x;
+      }
+      if(res.y1 > res.y2) {
+        var y = res.y1;
+        res.y1 = res.y2;
+        res.y2 = y;
+      }
+      if(res.x1 == res.x2 || res.y1 == res.y2) {
+        params.rect(false);
+      }
+      else {
+        params.rect(res);
+      }
+    }
+    
+    el.mousedown(function(e) {
+      if(params.active() && !drawing) {
+        last = params.convert(e.offsetX, e.offsetY, true);
+        params.method(last.x, last.y);
+        drawing = true;
+      }
+    });
+    el.mouseup(function(e) {
+      if(params.active() && drawing) {
+        drawing = false;
+      }
+    });
+    el.mousemove(function(e) {
+      if(drawing) {
+        var current = params.convert(e.offsetX, e.offsetY, true);
+        if(current.x != last.x || current.y != last.y) {
+          params.method(current.x, current.y);
+          last = current
+        }
+      }
+    });
+  }
+};
+
+ko.bindingHandlers.tileset = {
+  init: function(element, valueAccessor) {
+    var editor = valueAccessor();
+    editor.setTileZone(element);
+  }
+};

@@ -16,6 +16,7 @@ module.exports = function(app, io){
     app.get('/api/scores', ScoresController.index);
     app.post('/api/scores', ScoresController.add);  
 
-    app.post('/uploadTile', UploadTileController);
+    app.post('/uploadTile', UploadTileController.upload);
+    app.get('/tilesets/:id.png', UploadTileController.download);
     app.get('/editor', EditorController.index);  
 };

@@ -4,7 +4,7 @@ function Editor(io, viewport, panel, canvas) {
   var self = this;
   this.io = io;
 
-  this.tilesets = new TilesetsEditor(io);
+  this.tilesets = new TilesetsEditor(io, viewport.tilesSize);
 
   // map and viewport
   this.viewport = viewport;
@@ -47,7 +47,8 @@ function Editor(io, viewport, panel, canvas) {
   this.toolbar = {
     maintool: maintool,
     move: ko.computed(function(){ return (maintool() == 'move') }),
-    select: ko.computed(function(){ return (maintool() == 'select') })
+    select: ko.computed(function(){ return (maintool() == 'select') }),
+    draw: ko.computed(function(){ return (maintool() == 'draw') })
   };
 
   // overlay
@@ -119,7 +120,7 @@ Editor.prototype = {
     }
     
     // prepare style
-    ctx.strokeStyle = '#FF0000';
+    ctx.strokeStyle = 'rgba(0,0,0, 0.5)';
     ctx.beginPath();
     
     // vertical bar
@@ -127,7 +128,7 @@ Editor.prototype = {
       , x = Math.round(dx*tileSize);
     while(x<canvas.width) {
       ctx.moveTo(x, 0);
-      ctx.lineTo(x, 20);
+      ctx.lineTo(x, canvas.height);
       x+=tileSize;
     }
     
@@ -136,13 +137,29 @@ Editor.prototype = {
       , y = Math.round(dy*tileSize);
     while(y<canvas.height) {
       ctx.moveTo(0, y);
-      ctx.lineTo(20, y);
+      ctx.lineTo(canvas.width, y);
       y+=tileSize;
     }
     
     // draw
     ctx.stroke();
     ctx.restore();
+  },
+  drawTile: function(x, y) {
+    var tile = this.tilesets.getTile();
+    var map = this.currentMap();
+    if(!tile || !map) return;
+
+    var layer = this.currentLayer();
+    if(!layer) return;
+
+    this.io.emit('drawTile', {
+      tile: tile,
+      x: x,
+      y: y,
+      map: map.id,
+      layer.id
+    })
   },
   setGameNetwork: function(net) {
     this.gameNet = net;

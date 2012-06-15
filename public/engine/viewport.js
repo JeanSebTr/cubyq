@@ -27,10 +27,12 @@ function Viewport(canvas) {
 }
 
 Viewport.prototype = {
-	pxToCoord: function(x, y) {
+	pxToCoord: function(x, y, floor) {
+		var x = this.pos.x + x/this.tilesSize;
+		var y = this.pos.y + y/this.tilesSize;
 		return {
-			x: this.pos.x + x/this.tilesSize,
-			y: this.pos.y + y/this.tilesSize
+			x: floor?Math.floor(x):x,
+			y: floor?Math.floor(y):y
 		};
 	},
 	coordToPx: function(x, y) {

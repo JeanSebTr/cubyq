@@ -78,15 +78,20 @@
           </span>
         </label>
       </p>
-      <p data-bind="with: tilesets.current" style="display: inline-block;">
-        <img data-bind="attr: {src: '/tilesets/'+id+'.png', width: viewport.tilesSize, height: viewport.tilesSize}" />
+      <p data-bind="style: {
+        width: viewport.tilesSize+'px',
+        height: viewport.tilesSize+'px',
+        backgroundImage: tilesets.current()?'url(/tilesets/'+tilesets.current().id+'.png)':'',
+        backgroundPosition: (-tilesets.x()*viewport.tilesSize)+'px '+(-tilesets.y()*viewport.tilesSize)+'px'
+      }" style="display: inline-block; margin: 0;">
+        
       </p>
       <p style="display: inline-block;">
-        <button data-bind="click: tilesets.show.bind(tilesets, true)">Tiles</button>
+        <button data-bind="click: tilesets.show.bind(tilesets, true), clickBubble: false">Tiles</button>
       </p>
     </div>
     <div data-bind="with: tilesets">
-      <div id="tilesets" data-bind="visible: show">
+      <div id="tilesets" data-bind="visible: show, click: function(){}, clickBubble: false">
         <div>
           <strong>Ajouter un tileset :</strong>
           <form enctype="multipart/form-data" data-bind="submit: uploadTile" style="display: inline-block;">
@@ -95,18 +100,24 @@
             <input type="submit" value="Ajouter" />
           </form>
         </div>
-        <label>Tilesets :<select data-bind="value: current, options: list"></select></label>
-        <div data-bind="with: current">
+        <label>Tilesets :<select data-bind="value: current, options: list, optionsCaption: 'TileSets...', optionsText: 'name'"></select></label>
+        <button data-bind="click: show.bind(tilesets, false)" style="float: right;">Fermer</button>
+        <div data-bind="with: current" style="clear: both;">
+        <div>
           <strong>Modifier :</strong>
-          <form enctype="multipart/form-data" data-bind="submit: uploadTile" style="display: inline-block;">
+          <form enctype="multipart/form-data" data-bind="submit: $parent.uploadTile" style="display: inline-block;">
+            <label>Nom :<input name="name" type="text" data-bind="value: name" /></label>
+            <input type="file" name="tileset" />
+            <input type="submit" value="Modifier" />
+            <input type="hidden" name="tileset" data-bind="value: id" />
           </form>
         </div>
+        <div data-bind="tileset: $parent">
+          <canvas data-bind="click: $parent.select.bind($parent)"></canvas>
+        </div>
+        </div>
+
         
-        
-            
-            
-        </form>
-        <button data-bind="click: show.bind(tilesets, false)">Fermer</button>
       </div>
     </div>
     <div id="panel">
@@ -136,6 +147,7 @@
     <canvas id="overlay" data-bind="
       move: {coord: viewport.position, active: toolbar.move, step: viewport.tilesSize},
       select: {rect: selection, active: toolbar.select, step: viewport.tilesSize, convert: viewport.pxToCoord.bind(viewport)},
+      draw: {active: toolbar.draw, step: viewport.tilesSize, convert: viewport.pxToCoord.bind(viewport), method: drawTile.bind($data)},
       attr: {height: viewport.size().h-50, width: viewport.size().w-250}"></canvas>
     <script>
       $(function() {

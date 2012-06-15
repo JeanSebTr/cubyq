@@ -8,7 +8,6 @@ var ObjectId = Schema.ObjectId;
 var TileSetSchema = new Schema({
     name: String,
     witdh: Number,
-    height: Number,
     file: Buffer,
     tiles: [ObjectId]
 });

@@ -23,6 +23,7 @@ module.exports = function(io){
         socket.on('message', onMessage.bind(socket));
         socket.on('console', onConsole.bind(socket));
         socket.on('player-init', onPlayerInit.bind(socket));
+        socket.on('player-update', onPlayerUpdate.bind(socket));
 
         //only one room for now
         joinRoom(socket, 'game:1');
@@ -56,6 +57,11 @@ module.exports = function(io){
         attachPlayerInfosToSocket(this, data);
         broadcastPlayerConnected(this);
         emitGameInit(this);
+    };
+
+    var onPlayerUpdate = function(data){
+        console.log(data);
+        this.broadcast.emit(data);  
     };
 
     //functions
