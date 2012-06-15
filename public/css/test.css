@@ -39,7 +39,7 @@ html body div#content
 	margin-left: auto;
 	margin-right: auto;
 	background-color: #9F6;
-	background-image: url(file:///Macintosh%20HD/Users/tiger_panthere/Documents/cubyq/public/images/tuile_info.png);
+	background-image: url(images/tuile_info.png);
 	background-repeat: repeat-x;
 	margin-top: 60px;
 	box-shadow: 8px 8px 12px #aaa;
@@ -145,7 +145,7 @@ html body div#content div#menu_bottom ul#menu_princ li
 	margin-left: auto;
 	margin-right: auto;
 	text-align: center;
-	background-image:url(file:///Macintosh%20HD/Users/tiger_panthere/Documents/cubyq/public/images/bouton.png);
+	background-image:url(images/bouton.png);
 	background-repeat:no-repeat;
 	padding-top: 10px;
 }
