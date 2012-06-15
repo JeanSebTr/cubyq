@@ -1,0 +1,245 @@
+@charset "UTF-8";
+/* CSS Document */
+/* Author : Melanie Bilodeau, m_bilodeau@hotmail.ca, vendredi 15 juin 2012 */
+
+html body
+{
+	line-height: 125%;
+	background-color: black;
+	color: #332A2F;
+	font-family: 'Karla', sans-serif;
+}
+
+html body h1.invisible, html body div#content div.invisible
+{
+	display: none;
+}
+
+html body h2
+{
+	font-size: 60px;
+	padding-left: 50px;
+	padding-top: 100px;
+	font-family: 'Bubblegum Sans', cursive;
+}
+
+html body div#content h3
+{
+	font-family: 'Bubblegum Sans', cursive;
+	font-size : 24px;
+	padding-bottom: 20px;
+}
+
+html body div#content
+{
+	position:relative;
+	display: block;
+	width: 960px;
+	height: 700px;
+	margin-left: auto;
+	margin-right: auto;
+	background-color: #9F6;
+	background-image: url(file:///Macintosh%20HD/Users/tiger_panthere/Documents/cubyq/public/images/tuile_info.png);
+	background-repeat: repeat-x;
+	margin-top: 60px;
+	box-shadow: 8px 8px 12px #aaa;
+}
+
+html body div#content div
+{
+	margin-left: 50px;
+	margin-right: 50px;
+	margin-top: 60px;
+	margin-bottom: 60px;
+	display:block;
+	width: 43%;
+}
+
+html body div#content div#cont_desc
+{
+	position:absolute;
+	display:block;
+	width: 35%;
+	top: 120px;
+	right: 30px;
+	margin-bottom: 30px;
+}
+
+html body div#content div#cont_desc p, html body div#content div#cont_desc ul li
+{
+	font-size: 14px;
+}
+
+html body div#content div p
+{
+	margin-bottom: 20px;
+	font-size: 20px;
+	line-height: 125%;
+}
+
+html body div#content div#cont_desc p#logos
+{
+	position:relative;
+}
+
+html body div#content div#cont_desc p#logos span
+{
+	display: inline-block;
+}
+
+html body div#content div#cont_desc p#logos img
+{
+	position:relative;
+	top: 10px;
+}
+
+html body div#content div#cont_desc p#logos span.logo_desc span.desc1
+{
+	display:inline-block;
+	position: relative;
+	top: -10px;
+	padding-left: 15px;
+	padding-right: 5px;
+}
+
+
+
+
+html body div#content div#cont_desc p#logos span.logo_desc span.desc2
+{
+	display:inline-block;
+	position: relative;
+	top: -25px;
+	padding-left: 15px;
+}
+
+html body div#content div#cont_desc ul li a,html body div#content div#cont_desc p#logos span.logo_desc span.desc1 a
+{
+	color: #685137;
+	text-decoration: none;
+}
+
+html body div#content div#cont_desc ul li a:hover,html body div#content div#cont_desc p#logos span.logo_desc span.desc1 a:hover
+{
+	color:#E25050;
+}
+
+html body div#content div#menu_bottom ul#menu_princ
+{
+	position:absolute;
+	right: 0px;
+	top: 590px;
+	left: 22px;
+	display:block;
+	width: 960px;
+	margin-left: auto;
+	margin-right: auto;
+	padding-left: 20px;
+}
+
+html body div#content div#menu_bottom ul#menu_princ li
+{
+	display: inline-block;
+	width: 216px;
+	height: 80px;
+	margin-left: auto;
+	margin-right: auto;
+	text-align: center;
+	background-image:url(file:///Macintosh%20HD/Users/tiger_panthere/Documents/cubyq/public/images/bouton.png);
+	background-repeat:no-repeat;
+	padding-top: 10px;
+}
+
+html body div#content div#menu_bottom ul#menu_princ li a
+{
+	font-family: 'Bubblegum Sans', cursive;
+	font-size: 32px;
+	text-decoration: none;
+	color: #685137;
+	
+}
+
+html body div#content div#menu_bottom ul#menu_princ li a:hover
+{
+	color: #8E501C;
+}
+
+html body div#content div#menu_bottom ul#menu_princ li a.selectionne
+{
+	color: #E25050;
+}
+
+html body div#content div#menu_bottom ul#menu_princ li a#jouer img,html body div#content div#menu_bottom ul#menu_princ li a#hiScr img,html body div#content div#menu_bottom ul#menu_princ li a#hist img,html body div#content div#menu_bottom ul#menu_princ li a#htp img
+{
+	position: relative;
+	top:20px;
+	right:-5px;
+}
+
+html body div#content div#menu_bottom ul#menu_princ li a#hiScr,html body div#content div#menu_bottom ul#menu_princ li a#hist,html body div#content div#menu_bottom ul#menu_princ li a#htp
+{
+	position: relative;
+	top: -20px;
+}
+
+html body div#content div#menu_bottom ul#menu_princ li a#hist
+{
+	right:-7px;
+}
+
+html body div#content div#menu_bottom ul#menu_princ li a#jouer
+{
+	position:relative;
+	top: -20px;
+}
+
+html body div#content div#img_pres
+{
+	position:absolute;
+	top: -20px;
+	right: -120px;
+}
+
+html body div#content div#cont_hiScr
+{
+	/*border: 1px solid black;*/
+}
+
+html body div#content div#cont_hiScr table tr td
+{
+	height: 40px;
+	width: 70px;
+	text-align: center;
+}
+
+html body div#content div#cont_hiScr table
+{
+	width: 460px;
+}
+
+html body div#content div#cont_hiScr table tr:nth-child(even)
+{
+	background-color: #D6D8CB;
+	border: 1px solid #CBCCC6;
+}
+
+html body div#content div#cont_hiScr table tr:nth-child(odd)
+{
+	background-color: #BBBCB3;
+	border: 1px solid #CBCCC6;
+}
+
+html body div#content div#cont_hiScr table
+{
+	margin-top: 20px;
+}
+
+html body div#content div#cont_hiScr table tr.votrePosition td
+{
+	background-color: #FFBBBB;
+}
+
+html body div#content div#cont_hiScr table tr.votrePosition
+{
+	border: 0px solid #E25050;
+}
