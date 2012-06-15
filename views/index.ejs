@@ -1,23 +1,36 @@
 <!doctype html>
 <html>
 <head>
-
-<script src="/vendor/base.js"></script>
-<script src="/deps.js"></script>
-<script>
-  goog.require('GameEngine');
-</script>
-
+<% if(user){ %>
+    <script src="/vendor/base.js"></script>
+    <script src="/deps.js"></script>
+    <script>
+      goog.require('GameEngine');
+    </script>
+<% } %>
 </head>
 <body>
+<% if(user){ %>
+    <!-- On doit faire passer le jeu par l'état splash screen -->
 
+    <p><%= user.fb.name.full %></p>
 
-<canvas id="canvas" width="800" height="600"></canvas>
-<script type="text/javascript">
-  var Game = new GameEngine();
-  Game.init('canvas');
-</script>
+    <canvas id="canvas" width="800" height="600"></canvas>
+    <script type="text/javascript">
+      var Game = new GameEngine();
+      Game.init('canvas');
+    </script>
+<% }else { %>
+    <h1>Splash Screen / Loading screen</h1>
 
+    <!-- Pour l'instant..... on fera un change state plus tard -->
+    <script>
+        setTimeout(function(){
+            window.location.href = '/login';
+        }, 2000);
+    </script>
+
+<% } %>
 
 </body>
 </html>
