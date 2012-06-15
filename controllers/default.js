@@ -7,21 +7,14 @@ var DefaultController = (function(){
     //public
     return {
         index: function(req, res){
-            if(req.loggedIn){
-                res.redirect('/game');
-            }
-            else{
-                res.render('index');
-            }
+            res.render('index');
         },
 
         login: function(req, res){
             if(req.loggedIn){
                 res.logout();
             }
-            else{
-                res.redirect('/auth/facebook');
-            }
+            res.render('login');
         },
 
         logout: function(req, res){

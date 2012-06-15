@@ -19,7 +19,6 @@ module.exports = function(app, io){
     app.get('/', DefaultController.index);
     app.get('/login', DefaultController.login);
     app.get('/logout', DefaultController.logout);
-    app.get('/game', DefaultController.game);
 
     //API
     app.get('/api/scores', ScoresController.index);
