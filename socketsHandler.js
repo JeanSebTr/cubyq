@@ -51,10 +51,17 @@ module.exports = function(io){
         //}
         //ids[data.id] = true;
         //console.log('onPlayerInit :: ', ids);
-        initializePlayerInRedisStore(data.id);
-        attachPlayerInfosToSocket(this, data);
-        broadcastPlayerConnected(this);
-        emitGameInit(this);
+
+
+        var slips = generateSlips();
+        var socket = this;
+        initializePlayerInRedisStore(data.id, slips, function(){
+            data.slips = slips;
+            attachPlayerInfosToSocket(socket, data, function(){
+                broadcastPlayerConnected(socket);
+                emitGameInit(socket); 
+            }); 
+        });
     };
 
     var onPlayerUpdate = function(data){
@@ -103,21 +110,32 @@ module.exports = function(io){
         });    
     };
 
-    var attachPlayerInfosToSocket = function(socket, data){
+    var attachPlayerInfosToSocket = function(socket, data, callback){
         var user = {
             id: data.id,
             fbId: data.fbId,
-            fbName: data.fbName  
+            fbName: data.fbName,
+            slips: data.slips
         };
-        socket.set('user', JSON.stringify(user), redisErrorCallback);
+        socket.set('user', JSON.stringify(user), callback);
     };
 
-    var initializePlayerInRedisStore = function(id){
+    var initializePlayerInRedisStore = function(id, slips, callback){
         var hash = 'user:' + id;
         var params = [
-            hash, 'id', id, 'x' , 10, 'y', 10, 'vel', 0, 'points', 0, 'radius', 25, 'state', 0
+            hash,
+            'id', id,
+            'x' , 10, 
+            'y', 10,
+            'vel', 0,
+            'points', 0,
+            'radius', 25,
+            'state', 0,
+            'slips', slips
         ];
-        redisStore.hmset(params, redis.print);
+        redisStore.hmset(params, function(){
+            callback()
+        });
         //setExpire(id);
     };
 
@@ -158,6 +176,21 @@ module.exports = function(io){
                 });
             });
         });        
+    };
+
+    var generateSlips = function(){
+        var xMin = 30;
+        var xMax = 770;
+        var yMin = 30;
+        var yMax = 570;  
+
+        var randX = Math.random();
+        var randY = Math.random();
+
+        return {
+            x: xMin + xMax * randX,
+            y: yMin + yMax * randY
+        };
     };
 
     var redisErrorCallback = function(err){
