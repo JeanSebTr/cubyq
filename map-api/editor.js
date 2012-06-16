@@ -46,6 +46,9 @@ module.exports = function(io) {
 					}
 				});
 			}
+			else {
+				console.log('Did not modify any tile');
+			}
 		});
 	}
 
