@@ -18,13 +18,9 @@
     <p><%= user.fb.name.full %></p>
 
     <canvas id="canvas" width="800" height="600"></canvas>
-    <script type="text/javascript">
-      var Game = new GameEngine();
-      Game.init('canvas');
-    </script>
-
     <script>
         var socket = io.connect('/');
+        var Game = new GameEngine();
 
         socket.on('connect', function (data) {
             var data = {
@@ -32,17 +28,21 @@
                 fbId: '<%= user.fb.id %>',
                 fbName: '<%= user.fb.name.full %>'
             };
-            Game.player.id = data.id;
             socket.emit('player-init', data); 
         });
 
         socket.on('game-init', function(data){
-            console.log('game-init :: ', data); 
-        });
+            
+            Game.init('canvas');
+            
+            //TODO alain le player est undefined ici .... pourquoi ?
+            console.log(Game.player);
+            Game.player.id = '<%= user.id %>';
 
-        socket.on('player-connected', function(data){
-            console.log('player-connected :: ', data);
-            Game.playerManager.spawn(data);
+
+            socket.on('player-connected', function(data){
+                Game.playerManager.spawn(data);
+            });
         });
 
         socket.on('player-update', function(data){
