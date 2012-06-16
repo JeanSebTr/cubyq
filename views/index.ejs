@@ -33,6 +33,7 @@
             });
 
             socket.on('player-init', function(data){
+                console.log(data.id, 'CEISS');
                 Game.player.x = data.x / Game.globalScale;
                 Game.player.y = data.y /Game.globalScale; 
                 Game.player.isRendered = true;
