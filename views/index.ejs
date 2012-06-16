@@ -32,6 +32,7 @@
                 fbId: '<%= user.fb.id %>',
                 fbName: '<%= user.fb.name.full %>'
             };
+            Game.player.id = data.id;
             socket.emit('player-init', data); 
         });
 
