@@ -21,7 +21,7 @@ module.exports = function(io) {
 		},
 		joinMap: function(mapId) {
 			console.log('Try to join map :', mapId);
-			this.join(mapId);
+			this.join('map:'+mapId);
 		}
 	};
 	io.on('connection', function(socket) {

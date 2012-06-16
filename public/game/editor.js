@@ -153,13 +153,13 @@ Editor.prototype = {
     var layer = this.currentLayer();
     if(!layer) return;
 
+    console.log(['Send draw tile', x, y]);
     this.io.emit('drawTile', {
       tile: tile,
       x: x,
       y: y,
-      map: map.id,
-      layer.id
-    })
+      layer: layer.id
+    });
   },
   setGameNetwork: function(net) {
     this.gameNet = net;
@@ -200,7 +200,7 @@ Game.addState('Editor', {
       this._fps.text(Math.round(100000*l/n)/100);
       this.last_fps = frame;
     }
-    //this.viewport.draw();
+    this.viewport.drawWorld();
   },
   destroy: function() {
     

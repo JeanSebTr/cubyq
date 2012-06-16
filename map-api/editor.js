@@ -3,8 +3,57 @@ var mongoose = require('mongoose');
 var Map = mongoose.model('Map');
 var MapLayer = mongoose.model('MapLayer');
 var Tileset = mongoose.model('TileSet');
+var MapPart = mongoose.model('MapPart');
 
 module.exports = function(io) {
+
+	function saveTiles(part, map) {
+		part.save(function(err) {
+			if(err) {
+				console.log("Can't save map part :", err);
+			}
+			else {
+				io.sockets.in('map:'+map).emit('updateMap', {
+					map: map,
+					part: part.toObject()
+				});
+			}
+		});
+	}
+
+	function drawTile(draw, layer) {
+		var x = Math.floor(draw.x/10)*10;
+		var y = Math.floor(draw.y/10)*10;
+
+		MapPart.findOne({
+			layer: layer._id,
+			'pos.x': x,
+			'pos.y': y
+		}, function(err, part) {
+			if(err) {
+				console.log("Can't load map part", err);
+				return;
+			}
+			else if(!part) {
+				part = new MapPart();
+				part.layer = layer._id;
+				part.pos = {
+					x: x,
+					y: y
+				};
+				part.tiles = new Array(100); // 10x10 tiles / part
+			}
+			var i = ((draw.y-y)%10)*10+((draw.x-x)%10);
+			var tile = draw.tile;
+			part.tiles[i] = {
+				tileset: tile.id,
+				x: tile.x,
+				y: tile.y
+			};
+			part.markModified('tiles');
+			saveTiles(part, layer.map);
+		});
+	}
 
 	var ioMethods = {
 		// map methods
@@ -52,7 +101,7 @@ module.exports = function(io) {
 			layer.map = mapId;
 			layer.name = 'Untitled';
 			layer.save(function(err) {
-				io.sockets.in(mapId).emit('layerCreated', layer);
+				io.sockets.in('map:'+mapId).emit('layerCreated', layer);
 			});
 		},
 		renameLayer: function(data) {
@@ -78,6 +127,23 @@ module.exports = function(io) {
 					});
 				}, res);
 				cb(res);
+			});
+		},
+		drawTile: function(tile) {
+			MapLayer.findById(tile.layer, function(err, layer) {
+				if(err || !layer || !tile.tile) {
+					console.log("Can't find layer", tile.layer, err);
+				}
+				else {
+					Tileset.findById(tile.tile.id, function(err, tileset) {
+						if(err || !tileset) {
+							console.log("Can't find tileset", tile.tile.id, err);
+						}
+						else {
+							drawTile(tile, layer);
+						}
+					});
+				}
 			});
 		}
 	};
