@@ -77,6 +77,8 @@ module.exports = function(io){
                 console.log(err);
                 return;
             }
+            data.x = 100;
+            data.y = 100;
             socket.broadcast.emit('player-connected', data);   
         });
     };

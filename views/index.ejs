@@ -42,6 +42,7 @@
         socket.on('player-connected', function(data){
             console.log('player-connected');
             console.log(data); 
+            Game.playerManager.spawn(data);
         });
 
         socket.on('player-update', function(data){
