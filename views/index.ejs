@@ -19,9 +19,10 @@
 
     <canvas id="canvas" width="800" height="600"></canvas>
     <script>
-        var socket = io.connect('/');
+        var socket;
         var Game = new GameEngine();
         Game.init('canvas', function() {
+            wwsocket = io.connect('/');
             socket.on('connect', function (data) {
                 var data = {
                     id: '<%= user.id %>',
@@ -35,6 +36,7 @@
                 Game.player.id = '<%= user.id %>';
 
                 socket.on('player-connected', function(data){
+                    console.log('player-connected :: ', data);
                     Game.playerManager.spawn(data);
                 });
             });
