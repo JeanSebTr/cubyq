@@ -32,6 +32,12 @@
                 socket.emit('player-init', data); 
             });
 
+            socket.on('player-init', function(data){
+                Game.player.x = data.x / Game.globalScale;
+                Game.player.y = data.y /Game.globalScale; 
+                Game.player.isRendered = true;
+            });
+
             socket.on('game-init', function(data){
                 Game.player.id = '<%= user.id %>';
                 socket.on('player-connected', function(data){
