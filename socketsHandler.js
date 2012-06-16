@@ -50,7 +50,7 @@ module.exports = function(io){
 
     var onPlayerUpdate = function(data){
         data = JSON.parse(data);
-        this.broadcast.emit('player-update', data);
+        this.broadcast.volatile.emit('player-update', data);
     };
 
     //functions
