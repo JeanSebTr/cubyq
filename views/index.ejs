@@ -21,6 +21,7 @@
     <script>
         var socket = io.connect('/');
         var Game = new GameEngine();
+        Game.init('canvas');
 
         socket.on('connect', function (data) {
             var data = {
@@ -32,8 +33,6 @@
         });
 
         socket.on('game-init', function(data){
-            
-            Game.init('canvas');
             
             //TODO alain le player est undefined ici dans le ipad .... pourquoi ?
             console.log(Game.player);
