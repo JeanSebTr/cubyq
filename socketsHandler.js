@@ -8,7 +8,6 @@ if(redisToGoUrl.auth){
         console.log('Redis store connected.');
     });   
 }
-
  
 module.exports = function(io){
     //Events
@@ -20,9 +19,8 @@ module.exports = function(io){
         console.log('onConnection');
         socket.on('error', onError.bind(socket));
         socket.on('disconnect', onDisconnect.bind(socket));
-        socket.on('message', onMessage.bind(socket));
-        socket.on('console', onConsole.bind(socket));
         socket.on('player-init', onPlayerInit.bind(socket));
+        socket.on('player-update', onPlayerUpdate.bind(socket));
 
         //only one room for now
         joinRoom(socket, 'game:1');
@@ -32,30 +30,27 @@ module.exports = function(io){
         console.log('onDisconnect');
         broadcastPlayerDisconnected(this);
         this.get('user', function(err, data){
-            //removePlayerFromRedisStore(data.id); 
+            if(err){
+                console.log('ERROR : onDisconnect:: ', err);
+                return;
+            }
+            data = JSON.parse(data);
+            if(data && data.id){
+                removePlayerFromRedisStore(data.id);    
+            }
         });
     };
 
-    var onMessage = function(data){
-        console.log('onMessage');
-        console.log(data);
-        this.broadcast.emit('message', data);
-        this.emit('message', data);
-    };
-
-
-    var onConsole = function(data){
-        console.log('onConsole');
-        this.log(data); 
-    };
-
     var onPlayerInit = function(data){
-        console.log('onPlayerInit');
-        console.log(data);
         initializePlayerInRedisStore(data.id);
         attachPlayerInfosToSocket(this, data);
         broadcastPlayerConnected(this);
         emitGameInit(this);
+    };
+
+    var onPlayerUpdate = function(data){
+        data = JSON.parse(data);
+        this.broadcast.emit('player-update', data);
     };
 
     //functions
@@ -71,6 +66,9 @@ module.exports = function(io){
                 console.log(err);
                 return;
             }
+            data = JSON.parse(data);
+            data.x = 100;
+            data.y = 100;
             socket.broadcast.emit('player-connected', data);   
         });
     };
@@ -81,6 +79,7 @@ module.exports = function(io){
                 console.log(err);
                 return;
             }
+            data = JSON.parse(data);
             socket.broadcast.emit('player-disconnected', data);   
         });    
     };
@@ -91,21 +90,15 @@ module.exports = function(io){
             fbId: data.fbId,
             fbName: data.fbName  
         };
-        socket.set('user', user, redisErrorCallback);
+        socket.set('user', JSON.stringify(user), redisErrorCallback);
     };
 
     var initializePlayerInRedisStore = function(id){
         var params = [
-            id,
-            'x' , 10,
-            'y', 10,
-            'vel', 0,
-            'points', 0,
-            'radius', 25,
-            'state', 0
+            id, 'id', id, 'x' , 10, 'y', 10, 'vel', 0, 'points', 0, 'radius', 25, 'state', 0
         ];
         redisStore.hmset(params, redis.print);
-        setExpire(id);
+        //setExpire(id);
     };
 
     var setExpire = function(id){
@@ -117,13 +110,26 @@ module.exports = function(io){
     };
 
     var emitGameInit = function(socket){
-        socket.emit('game-init', {message: 'el data du jeux!'});
+        socket.get('user', function(err, user){
+            if(err){
+                console.log(err);
+                return;
+            } 
+            user = JSON.parse(user);
+            redisStore.hgetall(user.id, function(err, replies){
+                if(err){
+                    console.log(err);
+                    return;   
+                }
+                console.log("emitGameInit.. hgetall :: " ,replies);
+                socket.emit('game-init', replies);
+            });
+        });        
     };
 
     var redisErrorCallback = function(err){
         if(err){
-            console.log('ERROR:Redis');
-            console.log(err);   
+            console.log('ERROR:Redis ::', err);
         }
     }
 
