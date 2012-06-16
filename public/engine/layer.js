@@ -35,6 +35,13 @@ Layer.prototype = {
             }
         }
     },
+    updateTile: function(tile) {
+        var x = tile.x, y = tile.y;
+        if(!tile.tile && this.tiles[x+':'+y]) {
+            delete this.tiles[x+':'+y];
+        }
+        this.preDraw(x, y, tile.tile);
+    },
     update: function(layer) {
         this.z = layer.order;
         this.name(layer.name);
@@ -101,11 +108,16 @@ Layer.prototype = {
             this.ctx.putImageData(data, 0, 0);
         }
         var self = this;
-        Game.Tilesets.get(tile.tileset, function(img) {
+        if(!tile) {
             self.ctx.clearRect(x*Game.tilesSize, y*Game.tilesSize, Game.tilesSize, Game.tilesSize);
-            self.ctx.drawImage(img, tile.x*Game.tilesSize, tile.y*Game.tilesSize, Game.tilesSize, Game.tilesSize,
-                x*Game.tilesSize, y*Game.tilesSize, Game.tilesSize, Game.tilesSize);
-        });
+        }
+        else {
+            Game.Tilesets.get(tile.tileset || tile.id, function(img) {
+                self.ctx.clearRect(x*Game.tilesSize, y*Game.tilesSize, Game.tilesSize, Game.tilesSize);
+                self.ctx.drawImage(img, tile.x*Game.tilesSize, tile.y*Game.tilesSize, Game.tilesSize, Game.tilesSize,
+                    x*Game.tilesSize, y*Game.tilesSize, Game.tilesSize, Game.tilesSize);
+            });
+        }
     }
 };
 

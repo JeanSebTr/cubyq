@@ -10,6 +10,7 @@ function Network(io) {
     this.io = io;
     this.timeDiff = 0;
     io.on('layerCreated', this.addLayer.bind(this));
+    io.on('updateTile', this.updateTile.bind(this));
     io.on('updateLayer', this.updateLayer.bind(this));
     io.on('updateMap', this.updateMap.bind(this));
     setInterval(this.syncTime.bind(this), 5000);
@@ -41,6 +42,14 @@ Network.prototype = {
         for(i=0;i<l && this.worlds[i].id != layer.map; i++);
         if(i<l) {
             this.worlds[i].updateLayer(layer);
+        }
+    },
+    updateTile: function(tile) {
+        var i;
+        var map = tile.map;
+        for(i=0; i<this.worlds.length && map != this.worlds[i].id; i++);
+        if(i<this.worlds.length) {
+            this.worlds[i].updateTile(tile);
         }
     },
     updateMap: function(data) {

@@ -131,6 +131,7 @@ ko.bindingHandlers.draw = {
       , last;
     
     el.mousedown(function(e) {
+
       if(params.active() && !drawing) {
         last = params.convert(e.offsetX, e.offsetY, true);
         params.method(last.x, last.y);

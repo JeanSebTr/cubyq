@@ -21,6 +21,34 @@ module.exports = function(io) {
 		});
 	}
 
+	function updateTile(tile) {
+		var x = Math.floor(tile.x/10)*10;
+		var y = Math.floor(tile.y/10)*10;
+		var i = ((tile.y-y)%10)*10+((tile.x-x)%10);
+		var update = {};
+		update['tiles.'+i] = tile.tile;
+		MapPart.update({
+			layer: tile.layer,
+			'pos.x': Math.floor(tile.x/10)*10,
+			'pos.y': Math.floor(tile.y/10)*10
+		}, update, function(err, nb) {
+			if(err) {
+				console.log('Error erasing tile :',err);
+			}
+			else if(nb) {
+				MapLayer.findById(tile.layer, function(err, layer) {
+					if(!err && layer) {
+						tile.map = layer.map.toString();
+						io.sockets.in('map:'+layer.map).emit('updateTile', tile);
+					}
+					else {
+						console.log('Layer not found :', tile.layer, err);
+					}
+				});
+			}
+		});
+	}
+
 	function drawTile(draw, layer) {
 		var x = Math.floor(draw.x/10)*10;
 		var y = Math.floor(draw.y/10)*10;
@@ -42,16 +70,13 @@ module.exports = function(io) {
 					y: y
 				};
 				part.tiles = new Array(100); // 10x10 tiles / part
+				part.save(function(err) {
+					updateTile(tile);
+				});
 			}
-			var i = ((draw.y-y)%10)*10+((draw.x-x)%10);
-			var tile = draw.tile;
-			part.tiles[i] = {
-				tileset: tile.id,
-				x: tile.x,
-				y: tile.y
-			};
-			part.markModified('tiles');
-			saveTiles(part, layer.map);
+			else {
+				updateTile(draw);
+			}
 		});
 	}
 
@@ -147,6 +172,9 @@ module.exports = function(io) {
 				}, res);
 				cb(res);
 			});
+		},
+		eraseTile: function(tile) {
+			updateTile(tile)
 		},
 		drawTile: function(tile) {
 			MapLayer.findById(tile.layer, function(err, layer) {

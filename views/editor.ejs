@@ -72,6 +72,7 @@
       <p style="width: 375px; display: inline-block;">
         <label><input type="radio" name="mainTool" value="move" data-bind="checked: toolbar.maintool" />Déplacer</label>
         <label><input type="radio" name="mainTool" value="draw" data-bind="checked: toolbar.maintool" />Dessiner</label>
+        <label><input type="radio" name="mainTool" value="erase" data-bind="checked: toolbar.maintool" />Effacer</label>
         <label>
           <input type="radio" name="mainTool" value="select" data-bind="checked: toolbar.maintool" />Sélectionner
           <span data-bind="if: selection">
@@ -148,7 +149,7 @@
     <canvas id="overlay" data-bind="
       move: {coord: viewport.position, active: toolbar.move, step: viewport.tilesSize},
       select: {rect: selection, active: toolbar.select, step: viewport.tilesSize, convert: viewport.pxToCoord.bind(viewport)},
-      draw: {active: toolbar.draw, step: viewport.tilesSize, convert: viewport.pxToCoord.bind(viewport), method: drawTile.bind($data)},
+      draw: {active: toolbar.editTile, step: viewport.tilesSize, convert: viewport.pxToCoord.bind(viewport), method: drawTile.bind($data)},
       attr: {height: viewport.size().h-50, width: viewport.size().w-250}"></canvas>
     <script>
       $(function() {

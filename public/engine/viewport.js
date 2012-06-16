@@ -30,10 +30,8 @@ function Viewport(canvas) {
 
 Viewport.prototype = {
 	pxToCoord: function(x, y, floor) {
-		console.log(['Convert',x,':',y,' relative',this.pos.x, ':', this.pos.y, this.tilesSize]);
 		var _x = this.pos.x*1 + (x/this.tilesSize);
 		var _y = this.pos.y*1 + (y/this.tilesSize);
-		console.log(['Converted', (x/this.tilesSize), _x, _y]);
 		return {
 			x: floor?Math.floor(_x):_x,
 			y: floor?Math.floor(_y):_y
