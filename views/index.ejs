@@ -22,7 +22,7 @@
         var socket;
         var Game = new GameEngine();
         Game.init('canvas', function() {
-            wwsocket = io.connect('/');
+            socket = io.connect('/');
             socket.on('connect', function (data) {
                 var data = {
                     id: '<%= user.id %>',
