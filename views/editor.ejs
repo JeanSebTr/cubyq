@@ -102,7 +102,7 @@
           </form>
         </div>
         <label>Tilesets :<select data-bind="value: current, options: list, optionsCaption: 'TileSets...', optionsText: 'name'"></select></label>
-        <button data-bind="click: show.bind(tilesets, false)" style="float: right;">Fermer</button>
+        <button data-bind="click: show.bind($data, false)" style="float: right;">Fermer</button>
         <div data-bind="with: current" style="clear: both;">
         <div>
           <strong>Modifier :</strong>
