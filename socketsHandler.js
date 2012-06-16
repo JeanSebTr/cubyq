@@ -94,8 +94,9 @@ module.exports = function(io){
     };
 
     var initializePlayerInRedisStore = function(id){
+        var hash = 'user:' + id;
         var params = [
-            id, 'id', id, 'x' , 10, 'y', 10, 'vel', 0, 'points', 0, 'radius', 25, 'state', 0
+            hash, 'id', id, 'x' , 10, 'y', 10, 'vel', 0, 'points', 0, 'radius', 25, 'state', 0
         ];
         redisStore.hmset(params, redis.print);
         //setExpire(id);
@@ -116,13 +117,32 @@ module.exports = function(io){
                 return;
             } 
             user = JSON.parse(user);
-            redisStore.hgetall(user.id, function(err, replies){
+            var pattern = 'user:*';
+            redisStore.keys(pattern, function(err, replies){
                 if(err){
                     console.log(err);
-                    return;   
+                    return err;
                 }
-                console.log("emitGameInit.. hgetall :: " ,replies);
-                socket.emit('game-init', replies);
+                console.log(replies);
+                var users = [];
+                for(var i = 0; i<replies.length;i++){
+                    redisStore.hgetall(replies[i], function(err, replie){
+                        if(err){
+                            console.log(err);
+                            return;
+                        }
+                        console.log('replie :: ', replie);
+                        console.log('user :: ', user);
+
+                        if(replie.id != user.id){
+                            users.push(replie);   
+                        }
+                        if(users.length == replies.length - 1){
+                            console.log(users);
+                            socket.emit('game-init', users);
+                        }
+                   }); 
+                }
             });
         });        
     };
