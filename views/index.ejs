@@ -54,6 +54,7 @@
             });
 
             socket.on('player-update', function(data){
+                console.log(data.shamePoints, data.disgustPoints, data.slipsId);
                 Game.playerManager.updatePlayer(data);
             });
         });
