@@ -112,6 +112,25 @@ module.exports = function(io) {
 					}
 				});
 		},
+		updateLayer: function(data) {
+			MapLayer.findById(data.id, function(err, layer) {
+				if(err || !layer) {
+					console.log("Can't find layer", data.id);
+				}
+				else if(layer.order != data.order) {
+					layer.order = data.order;
+					layer.save(function(err) {
+						if(err) {
+							console.log('Error saving layer ', layer._id, err);
+						}
+						else {
+							io.sockets.in('map:'+layer.map.toString())
+								.emit('updateLayer', layer.toObject());
+						}
+					});
+				}
+			});
+		},
 		listTilesets: function(cb) {
 			Tileset.find({}, ['name', 'width', 'tiles'], function(err, tilesets) {
 				var res = [];

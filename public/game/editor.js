@@ -85,10 +85,20 @@ Editor.prototype = {
     this.io.emit('renameLayer', {_id: id, name: name});
   },
   upLayer: function() {
-    //
+    var layer = this.currentLayer();
+    if(!layer) return;
+    this.io.emit('updateLayer', {
+      id: layer.id,
+      order: layer.z+1
+    });
   },
   downLayer: function() {
-    //
+    var layer = this.currentLayer();
+    if(!layer) return;
+    this.io.emit('updateLayer', {
+      id: layer.id,
+      order: Math.max(0, layer.z-1)
+    });
   },
   drawOverlay: function() {
 
@@ -120,7 +130,7 @@ Editor.prototype = {
     }
     
     // prepare style
-    ctx.strokeStyle = 'rgba(0,0,0, 0.5)';
+    ctx.strokeStyle = 'rgba(0,0,0, 0.25)';
     ctx.beginPath();
     
     // vertical bar

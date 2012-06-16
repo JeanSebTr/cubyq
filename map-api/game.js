@@ -1,5 +1,6 @@
 
 var mongoose = require('mongoose');
+var MapPart = mongoose.model('MapPart');
 var MapLayer = mongoose.model('MapLayer');
 
 module.exports = function(io) {
@@ -16,6 +17,30 @@ module.exports = function(io) {
 					var res = [];
 					layers.forEach(function(layer) { this.push(layer.toObject()); }, res);
 					cb(res);
+				}
+			});
+		},
+		getLayer: function(layerId) {
+			var socket = this;
+			MapLayer.findById(layerId || '', function(err, layer) {
+				if(err || !layer) {
+					console.log("Can't find layer", layerId, err);
+				}
+				else {
+					MapPart.find({layer: layer._id}, function(err, parts) {
+						if(err) {
+							console.log();
+						}
+						else {
+							var res = [];
+							parts.forEach(function(part) {this.push(part.toObject());}, res);
+							console.log('emit parts', res.length);
+							socket.emit('updateMap', {
+								map: layer.map,
+								parts: res
+							});
+						}
+					});
 				}
 			});
 		},
