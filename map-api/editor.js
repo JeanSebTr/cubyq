@@ -71,7 +71,7 @@ module.exports = function(io) {
 				};
 				part.tiles = new Array(100); // 10x10 tiles / part
 				part.save(function(err) {
-					updateTile(tile);
+					updateTile(draw);
 				});
 			}
 			else {
