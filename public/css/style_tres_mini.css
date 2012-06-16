@@ -1,0 +1,23 @@
+@charset "UTF-8";
+/* CSS Document */
+
+html body
+{
+	line-height: 125%;
+	background-color: green;
+	color: #332A2F;
+	font-family: 'Karla', sans-serif;
+}
+
+html body div#content
+{
+	display: block;
+	width: 320px;
+	height: 700px;
+	margin-left: auto;
+	margin-right: auto;
+	background-color: #9F6;
+	background-image: url(../images/tuile_info.png);
+	background-repeat: repeat-x;
+	box-shadow: 8px 8px 12px #aaa;
+}

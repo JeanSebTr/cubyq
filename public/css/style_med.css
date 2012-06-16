@@ -1,0 +1,273 @@
+@charset "UTF-8";
+/* feuille de CSS pour les téléphones plus grands ou sur le côté (largeur:480px minimum) */
+
+html body
+{
+	line-height: 115%;
+	background-image: URL("../images/tuile_claire50.png");
+	color: #332A2F;
+	font-family: 'Karla', sans-serif;
+	font-size:50%;
+}
+
+html body h1.invisible
+{
+	display:none;
+}
+
+html body h2
+{
+	font-size: 18px;
+	padding-left: 10px;
+	padding-top: 35px;
+	font-family: 'Bubblegum Sans', cursive;
+	line-height: 115%;
+}
+
+html body div#cont_phones h3
+{
+	font-family: 'Bubblegum Sans', cursive;
+	font-size : 16px;
+	margin-top: 19px;
+	padding-bottom: 10px;
+	padding-left: 10px;
+}
+
+html body div#cont_phones div#cont_desc_phone
+{
+	margin-bottom: 20px;
+}
+
+html body div#cont_phones div#cont_hist_phone h3
+{
+	padding-bottom: 35px;
+}
+
+html body div#cont_phones div#cont_desc_phone p
+{
+	line-height: 115%;
+	margin-bottom: 5px;
+	font-size: 7px;
+	margin-top:3px;
+}
+
+html body div#cont_phones div#cont_desc_phone ul
+{
+	margin-bottom: 13px;
+}
+
+html body div#cont_phones div#cont_desc_phone ul li
+{
+	margin-top: 0px;
+	margin-bottom: 0px;
+	margin-left: 20px;
+}
+
+html body div#cont_phones div p
+{
+	padding-left: 10px;
+	padding-right: 10px;
+	margin-bottom: 10px;
+	font-size: 10px;
+	line-height: 115%;
+}
+
+html body div#content
+{
+	display:none;
+}
+
+html body div#cont_phones
+{
+	background-image: URL(../images/tuile_info50.png);
+	background-repeat: repeat-x;
+	max-width:480px;
+	min-height: 700px;
+}
+
+html body div#cont_phones div#cont_hist_phone.invisible,
+html body div#cont_phones div#cont_htp_phone.invisible,
+html body div#cont_phones div#cont_hiScr_phone.invisible,
+html body div#cont_phones div#cont_desc_phone.invisible
+{
+	display: none;
+}
+
+html body div#cont_phones div#menu_bottom ul#menu_princ
+{
+	display:block;
+	position:relative;
+	margin-top: 7px;
+	margin-left: 5%;
+	margin-right: auto;
+	padding-left: 10px;
+}
+
+html body div#cont_phones div#menu_bottom ul#menu_princ li
+{
+	display:inline-block;
+	width: 108px;
+	height: 40px;
+	margin-left: auto;
+	margin-right: auto;
+	text-align: center;
+	background-image:url(../images/bouton50.png);
+	background-repeat:no-repeat;
+	padding-top: 25px;
+}
+
+html body div#cont_phones div#menu_bottom ul#menu_princ li a
+{
+	font-family: 'Bubblegum Sans', cursive;
+	font-size: 16px;
+	text-decoration: none;
+	color: #685137;
+	
+}
+
+html body div#cont_phones div#menu_bottom ul#menu_princ li a:hover
+{
+	color: #8E501C;
+}
+
+html body div#cont_phones div#menu_bottom ul#menu_princ li a.selectionne
+{
+	color: #E25050;
+}
+
+html body div#cont_phones div#menu_bottom ul#menu_princ li#debut_liste
+{
+	/*margin-left: 115px;*/
+}
+
+html body div#cont_phones div#menu_bottom ul#menu_princ li a#jouer_phone img,
+html body div#cont_phones div#menu_bottom ul#menu_princ li a#hiScr_phone img,
+html body div#cont_phones div#menu_bottom ul#menu_princ li a#hist_phone img,
+html body div#cont_phones div#menu_bottom ul#menu_princ li a#htp_phone img,
+html body div#cont_phones div#menu_bottom ul#menu_princ li a#credits_phone img
+{
+	position: relative;
+	top:10px;
+	right:-3px;
+}
+
+html body div#cont_phones div#menu_bottom ul#menu_princ li a#hiScr_phone,
+html body div#cont_phones div#menu_bottom ul#menu_princ li a#hist_phone,
+html body div#cont_phones div#menu_bottom ul#menu_princ li a#htp_phone,
+html body div#cont_phones div#menu_bottom ul#menu_princ li a#credits_phone
+{
+	position: relative;
+	top: -10px;
+}
+
+html body div#cont_phones div#menu_bottom ul#menu_princ li a#hist_phone
+{
+	right:-3px;
+}
+
+html body div#cont_phones div#menu_bottom ul#menu_princ li a#jouer_phone
+{
+	position:relative;
+	top: -10px;
+}
+
+html body div#cont_phones div#cont_desc_phone p#logos
+{
+	position:relative;
+	margin-bottom: 10px;
+}
+
+html body div#cont_phones div#cont_desc_phone p#logos span
+{
+	display: inline-block;
+}
+
+html body div#cont_phones div#cont_desc_phone p#logos img
+{
+	position:relative;
+	top: 3px;
+	margin-bottom:10px;
+}
+
+html body div#cont_phones div#cont_desc_phone p#logos span.logo_desc span.desc
+{
+	display:inline-block;
+	position: relative;
+	top: -13px;
+	padding-right: 13px;
+}
+
+html body div#cont_phones div#cont_desc_phone p#logos span.logo_desc img#cubyq
+{
+	display:inline-block;
+	position: relative;
+	top: 3px;
+	padding-left: 3px;
+}
+
+html body div#cont_phones div#cont_desc_phone ul li a,
+html body div#cont_phones div#cont_desc_phone p#logos span.logo_desc span.desc a
+{
+	color: #685137;
+	text-decoration: none;
+}
+
+html body div#cont_phones div#cont_hiScr_phone table tr td
+{
+	height: 15px;
+	width: 35px;
+	text-align: center;
+}
+
+html body div#cont_phones div#cont_hiScr_phone table
+{
+	width: 80%;
+	margin-left:auto;
+	margin-right:auto;
+}
+
+html body div#cont_phones div#cont_hiScr_phone table tr:nth-child(even)
+{
+	background-color: #D6D8CB;
+	border: 1px solid #CBCCC6;
+}
+
+html body div#cont_phones div#cont_hiScr_phone table tr:nth-child(odd)
+{
+	background-color: #BBBCB3;
+	border: 1px solid #CBCCC6;
+}
+
+html body div#cont_phones div#cont_hiScr_phone table
+{
+	margin-top: 3px;
+}
+
+html body div#cont_phones div#cont_hiScr_phone table tr.votrePosition td
+{
+	background-color: #FFBBBB;
+}
+
+html body div#footer
+{
+	display:block;
+	margin-top:5px;
+	text-align:center;
+	margin-bottom:5px;
+	margin-left:auto;
+	margin-right:auto;
+}
+
+html body div#cont_phones div a.redirect
+{
+	text-decoration: none;
+	color: #685137;
+	width: 80%;
+	margin-left: 40px;
+}
+
+html body div#cont_phones div a.redirect img
+{
+	position:relative;
+	top: 5px;
+}
