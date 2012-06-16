@@ -11,7 +11,7 @@ if(redisToGoUrl.auth){
  
 module.exports = function(io){
     //pour debug avec le meme id
-    var ids = {};
+    //var ids = {};
 
     //Events
     var onError = function(err){
@@ -23,7 +23,6 @@ module.exports = function(io){
         socket.on('disconnect', onDisconnect.bind(socket));
         socket.on('player-init', onPlayerInit.bind(socket));
         socket.on('player-update', onPlayerUpdate.bind(socket));
-
         //only one room for now
         joinRoom(socket, 'game:1');
     };
@@ -38,19 +37,20 @@ module.exports = function(io){
             }
             data = JSON.parse(data);
             if(data && data.id){
-                if(ids[data.id]) ids[data.id] = false;
-
+                console.log('debug');
+                //if(ids[data.id]) ids[data.id] = false;
+                //console.log(ids);
                 removePlayerFromRedisStore(data.id);    
             }
         });
     };
 
     var onPlayerInit = function(data){
-        if(ids[data.id]){
-            data.id = data.id + 'toto';
-        }
-        ids[data.id] = true;
-
+        //if(ids[data.id]){
+            //data.id = data.id + 'toto';
+        //}
+        //ids[data.id] = true;
+        //console.log('onPlayerInit :: ', ids);
         initializePlayerInRedisStore(data.id);
         attachPlayerInfosToSocket(this, data);
         broadcastPlayerConnected(this);
