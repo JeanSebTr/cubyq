@@ -38,6 +38,13 @@
                     console.log('player-connected :: ', data);
                     Game.playerManager.spawn(data);
                 });
+
+                console.log('game-init :: ', data);
+
+                for(var i =0; i< data.length; i++){
+                   Game.playerManager.spawn(data[i]); 
+                }
+
             });
 
             socket.on('player-update', function(data){

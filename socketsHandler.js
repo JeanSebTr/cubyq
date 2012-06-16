@@ -125,24 +125,19 @@ module.exports = function(io){
                 }
                 console.log(replies);
                 var users = [];
-                for(var i = 0; i<replies.length;i++){
-                    redisStore.hgetall(replies[i], function(err, replie){
-                        if(err){
-                            console.log(err);
-                            return;
-                        }
-                        console.log('replie :: ', replie);
-                        console.log('user :: ', user);
-
-                        if(replie.id != user.id){
-                            users.push(replie);   
-                        }
-                        if(users.length == replies.length - 1){
-                            console.log(users);
-                            socket.emit('game-init', users);
-                        }
-                   }); 
+                var multi = redisStore.multi();
+                
+                for(var i = 0; i<replies.length;i++){ 
+                    multi.hgetall(replies[i]);
                 }
+                multi.exec(function(err, r){
+                    for(var i = 0; i < r.length;i++){   
+                        if(r[i].id != user.id){
+                            users.push(r[i]);
+                        }
+                    }
+                    socket.emit('game-init', users);
+                });
             });
         });        
     };
