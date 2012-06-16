@@ -38,6 +38,8 @@ module.exports = function(io){
             }
             data = JSON.parse(data);
             if(data && data.id){
+                if(ids[data.id]) ids[data.id] = false;
+
                 removePlayerFromRedisStore(data.id);    
             }
         });
