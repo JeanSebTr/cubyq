@@ -10,18 +10,19 @@ if(redisToGoUrl.auth){
 }
  
 module.exports = function(io){
+    //pour debug avec le meme id
+    //var ids = {};
+
     //Events
     var onError = function(err){
         console.log(err);
     };
 
     var onConnection = function(socket){
-        console.log('onConnection');
         socket.on('error', onError.bind(socket));
         socket.on('disconnect', onDisconnect.bind(socket));
         socket.on('player-init', onPlayerInit.bind(socket));
         socket.on('player-update', onPlayerUpdate.bind(socket));
-
         //only one room for now
         joinRoom(socket, 'game:1');
     };
@@ -36,21 +37,36 @@ module.exports = function(io){
             }
             data = JSON.parse(data);
             if(data && data.id){
+                console.log('debug');
+                //if(ids[data.id]) ids[data.id] = false;
+                //console.log(ids);
                 removePlayerFromRedisStore(data.id);    
             }
         });
     };
 
     var onPlayerInit = function(data){
-        initializePlayerInRedisStore(data.id);
-        attachPlayerInfosToSocket(this, data);
-        broadcastPlayerConnected(this);
-        emitGameInit(this);
+        //if(ids[data.id]){
+            //data.id = data.id + 'toto';
+        //}
+        //ids[data.id] = true;
+        //console.log('onPlayerInit :: ', ids);
+
+
+        var slips = generateSlips();
+        var socket = this;
+        initializePlayerInRedisStore(data.id, slips, function(){
+            data.slips = slips;
+            attachPlayerInfosToSocket(socket, data, function(){
+                broadcastPlayerConnected(socket);
+                emitGameInit(socket); 
+            }); 
+        });
     };
 
     var onPlayerUpdate = function(data){
         data = JSON.parse(data);
-        this.broadcast.emit('player-update', data);
+        this.broadcast.volatile.emit('player-update', data);
     };
 
     //functions
@@ -67,8 +83,18 @@ module.exports = function(io){
                 return;
             }
             data = JSON.parse(data);
-            data.x = 100;
-            data.y = 100;
+
+            var randX = Math.random();
+            var randY = Math.random();
+
+            var xMin = 30;
+            var xMax = 770;
+            var yMin = 30;
+            var yMax = 570;
+
+            data.x = randX * xMax + xMin;
+            data.y = randY * yMax + yMin;
+            socket.emit('player-init', data);
             socket.broadcast.emit('player-connected', data);   
         });
     };
@@ -84,20 +110,32 @@ module.exports = function(io){
         });    
     };
 
-    var attachPlayerInfosToSocket = function(socket, data){
+    var attachPlayerInfosToSocket = function(socket, data, callback){
         var user = {
             id: data.id,
             fbId: data.fbId,
-            fbName: data.fbName  
+            fbName: data.fbName,
+            slips: data.slips
         };
-        socket.set('user', JSON.stringify(user), redisErrorCallback);
+        socket.set('user', JSON.stringify(user), callback);
     };
 
-    var initializePlayerInRedisStore = function(id){
+    var initializePlayerInRedisStore = function(id, slips, callback){
+        var hash = 'user:' + id;
         var params = [
-            id, 'id', id, 'x' , 10, 'y', 10, 'vel', 0, 'points', 0, 'radius', 25, 'state', 0
+            hash,
+            'id', id,
+            'x' , 10, 
+            'y', 10,
+            'vel', 0,
+            'points', 0,
+            'radius', 25,
+            'state', 0,
+            'slips', slips
         ];
-        redisStore.hmset(params, redis.print);
+        redisStore.hmset(params, function(){
+            callback()
+        });
         //setExpire(id);
     };
 
@@ -116,15 +154,43 @@ module.exports = function(io){
                 return;
             } 
             user = JSON.parse(user);
-            redisStore.hgetall(user.id, function(err, replies){
+            var pattern = 'user:*';
+            redisStore.keys(pattern, function(err, replies){
                 if(err){
                     console.log(err);
-                    return;   
+                    return err;
                 }
-                console.log("emitGameInit.. hgetall :: " ,replies);
-                socket.emit('game-init', replies);
+                var users = [];
+                var multi = redisStore.multi();
+                
+                for(var i = 0; i<replies.length;i++){ 
+                    multi.hgetall(replies[i]);
+                }
+                multi.exec(function(err, r){
+                    for(var i = 0; i < r.length;i++){   
+                        if(r[i].id != user.id){
+                            users.push(r[i]);
+                        }
+                    }
+                    socket.emit('game-init', users);
+                });
             });
         });        
+    };
+
+    var generateSlips = function(){
+        var xMin = 30;
+        var xMax = 770;
+        var yMin = 30;
+        var yMax = 570;  
+
+        var randX = Math.random();
+        var randY = Math.random();
+
+        return {
+            x: xMin + xMax * randX,
+            y: yMin + yMax * randY
+        };
     };
 
     var redisErrorCallback = function(err){
