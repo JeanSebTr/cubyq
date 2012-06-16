@@ -10,13 +10,15 @@ if(redisToGoUrl.auth){
 }
  
 module.exports = function(io){
+    //pour debug avec le meme id
+    var ids = {};
+
     //Events
     var onError = function(err){
         console.log(err);
     };
 
     var onConnection = function(socket){
-        console.log('onConnection');
         socket.on('error', onError.bind(socket));
         socket.on('disconnect', onDisconnect.bind(socket));
         socket.on('player-init', onPlayerInit.bind(socket));
@@ -42,6 +44,11 @@ module.exports = function(io){
     };
 
     var onPlayerInit = function(data){
+        if(ids[data.id]){
+            data.id = data.id + 'toto';
+        }
+        ids[data.id] = true;
+
         initializePlayerInRedisStore(data.id);
         attachPlayerInfosToSocket(this, data);
         broadcastPlayerConnected(this);
@@ -67,8 +74,18 @@ module.exports = function(io){
                 return;
             }
             data = JSON.parse(data);
-            data.x = 100;
-            data.y = 100;
+
+            var randX = Math.random();
+            var randY = Math.random();
+
+            var xMin = 30;
+            var xMax = 770;
+            var yMin = 30;
+            var yMax = 570;
+
+            data.x = randX * xMax + xMin;
+            data.y = randY * yMax + yMin;
+            socket.emit('player-init', data);
             socket.broadcast.emit('player-connected', data);   
         });
     };
@@ -123,7 +140,6 @@ module.exports = function(io){
                     console.log(err);
                     return err;
                 }
-                console.log(replies);
                 var users = [];
                 var multi = redisStore.multi();
                 
