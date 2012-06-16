@@ -45,7 +45,6 @@
         });
 
         socket.on('player-update', function(data){
-            console.log('player-update :: ', data);
             Game.playerManager.updatePlayer(data);
         });
 
