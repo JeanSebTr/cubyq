@@ -33,7 +33,7 @@ module.exports = function(io) {
 			'pos.y': Math.floor(tile.y/10)*10
 		}, update, function(err, nb) {
 			if(err) {
-				console.log('Error erasing tile :',err);
+				console.log('Error updating tile :',err);
 			}
 			else if(nb) {
 				MapLayer.findById(tile.layer, function(err, layer) {
