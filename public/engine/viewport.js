@@ -4,6 +4,8 @@ var Game;
 
 function Viewport(canvas) {
 	var self = this;
+	this.tilesSize = Game.tilesSize;
+	this.viewRatio = 2.1;
 
 	// main canvas
 	if(window.G_vmlCanvasManager) {
@@ -11,7 +13,6 @@ function Viewport(canvas) {
 	}
 	this.ctx = canvas.getContext('2d');
 	this.canvas = canvas;
-	this.tilesSize = 32;
 
 	this.world = ko.observable(null);
 
@@ -20,19 +21,22 @@ function Viewport(canvas) {
 		x: ko.observable(0),
 		y: ko.observable(0)
 	};
+
 	// need freaking fast access to those values
 	this.comPos = ko.computed(function() { return {x: self.position.x(), y: self.position.y()}; });
-	this.comPos.subscribe(function(val){self.pos = val;});
+	this.comPos.subscribe(function(val){self.pos = val; });
 	this.pos = this.comPos();
 }
 
 Viewport.prototype = {
 	pxToCoord: function(x, y, floor) {
-		var x = this.pos.x + x/this.tilesSize;
-		var y = this.pos.y + y/this.tilesSize;
+		console.log(['Convert',x,':',y,' relative',this.pos.x, ':', this.pos.y, this.tilesSize]);
+		var _x = this.pos.x*1 + (x/this.tilesSize);
+		var _y = this.pos.y*1 + (y/this.tilesSize);
+		console.log(['Converted', (x/this.tilesSize), _x, _y]);
 		return {
-			x: floor?Math.floor(x):x,
-			y: floor?Math.floor(y):y
+			x: floor?Math.floor(_x):_x,
+			y: floor?Math.floor(_y):_y
 		};
 	},
 	coordToPx: function(x, y) {
@@ -41,25 +45,26 @@ Viewport.prototype = {
 			y: (y - this.pos.y)*this.tilesSize
 		};
 	},
-	pause: function(pause) {
-		// this. // TODO ?
-	},
 	setWorld: function(world) {
-		this.loading = true;
 		this.world(world);
 	},
-	track: function(entity) {
-		this.trackEntity = entity;
+	contains: function(entity) {
+
 	},
-	update: function() {
-		// TODO : track entity
-	},
-  contains: function(entity) {
-    
-  },
-  drawWorld: function() {
-    
-  }
+	drawWorld: function() {
+		var world = this.world();
+		if(world) {
+			this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+			var size = this.size();
+			world.render({
+				ctx: this.ctx,
+				x: this.pos.x*this.tilesSize,
+				y: this.pos.y*this.tilesSize,
+				w: size.w,
+				h: size.h
+			});
+		}
+	}
 };
 
 Game.Viewport = Viewport;
