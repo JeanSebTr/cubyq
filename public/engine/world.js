@@ -14,7 +14,9 @@ function World(id, provider) {
   provider.listLayers(id, function(layers) {
     var res = [];
     layers.forEach(function(layer) {
-      res.push(new Game.Layer(layer, self));
+      var _layer = new Game.Layer(layer, self);
+      self.addLayer(_layer);
+      res.push(_layer);
     });
     self.layers(res.sort(self.sortLayers));
   });
@@ -22,9 +24,20 @@ function World(id, provider) {
 }
 World.prototype = {
   addLayer: function(layer) {
+    console.log('Add layer', layer.id);
     var layers = this.layers();
     layers.push(layer);
+    this.provider.getLayer(layer.id);
     this.layers(layers.sort(this.sortLayers));
+  },
+  updateLayer: function(layer) {
+    var layers = this.layers();
+    for(var i=0; i<layers.length; i++) {
+      if(layers[i].id == layer._id) {
+        layers[i].update(layer);
+      }
+    }
+    this.layers(layers.sort(self.sortLayers));
   },
   updateMap: function(part) {
     var layers = this.layers();
@@ -51,7 +64,7 @@ World.prototype = {
     }
   },
   sortLayers: function(a, b) {
-    return a.z - b.z;
+    return b.z - a.z;
   },
   setLimit: function(x, y, w, h) {
     this.limits = {x: x, y: y, w: w, h: h};

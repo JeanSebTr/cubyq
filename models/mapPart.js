@@ -6,7 +6,7 @@ var Schema = mongoose.Schema;
 var ObjectId = Schema.ObjectId;
 
 var MapPartSchema = new Schema({
-    layer: ObjectId,
+    layer: {type:ObjectId, index: true},
     pos: {x: Number, y: Number},
     tiles: [Schema.Types.Mixed]
 });

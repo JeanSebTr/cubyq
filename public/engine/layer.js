@@ -35,6 +35,10 @@ Layer.prototype = {
             }
         }
     },
+    update: function(layer) {
+        this.z = layer.order;
+        this.name(layer.name);
+    },
     render: function(ctx, x, y, w, h) {
         var _x = x - this.x*Game.tilesSize;
         var sx, dx, dw;
