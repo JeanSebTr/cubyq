@@ -57,7 +57,7 @@ module.exports = function(io){
 
     var onPlayerUpdate = function(data){
         console.log('onPlayerUpdate :: ', data);
-        this.broadcast.emit(data);  
+        this.broadcast.emit('player-update', data);  
     };
 
     //functions
