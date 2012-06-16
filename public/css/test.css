@@ -10,7 +10,7 @@ html body
 	font-family: 'Karla', sans-serif;
 }
 
-html body h1.invisible, html body div#content div.invisible
+html body h1.invisible, html body div#content div.invisible, html body div#cont_phones
 {
 	display: none;
 }
@@ -32,16 +32,17 @@ html body div#content h3
 
 html body div#content
 {
+	display:inherit;
 	position:relative;
 	display: block;
 	width: 960px;
-	height: 700px;
 	margin-left: auto;
 	margin-right: auto;
-	background-color: #9F6;
-	background-image: url(images/tuile_info.png);
+	background-color: white;
+	background-image: url(../images/tuile_longue.png);
 	background-repeat: repeat-x;
 	margin-top: 60px;
+	padding-bottom: 90px;
 	box-shadow: 8px 8px 12px #aaa;
 }
 
@@ -53,6 +54,13 @@ html body div#content div
 	margin-bottom: 60px;
 	display:block;
 	width: 43%;
+}
+
+html body div#content div#ordi,
+html body div#content div#tab_electro
+{
+	width:100%;
+	margin:0;
 }
 
 html body div#content div#cont_desc
@@ -97,20 +105,17 @@ html body div#content div#cont_desc p#logos span.logo_desc span.desc1
 {
 	display:inline-block;
 	position: relative;
-	top: -10px;
-	padding-left: 15px;
+	top: 0px;
+	padding-left: 7px;
 	padding-right: 5px;
 }
 
-
-
-
-html body div#content div#cont_desc p#logos span.logo_desc span.desc2
+html body div#content div#cont_desc p#logos span.logo_desc img#cubyq
 {
 	display:inline-block;
 	position: relative;
-	top: -25px;
-	padding-left: 15px;
+	top: 15px;
+	padding-left: 7px;
 }
 
 html body div#content div#cont_desc ul li a,html body div#content div#cont_desc p#logos span.logo_desc span.desc1 a
@@ -128,7 +133,7 @@ html body div#content div#menu_bottom ul#menu_princ
 {
 	position:absolute;
 	right: 0px;
-	top: 590px;
+	bottom: 20px;
 	left: 22px;
 	display:block;
 	width: 960px;
@@ -145,7 +150,7 @@ html body div#content div#menu_bottom ul#menu_princ li
 	margin-left: auto;
 	margin-right: auto;
 	text-align: center;
-	background-image:url(images/bouton.png);
+	background-image:url(../images/bouton.png);
 	background-repeat:no-repeat;
 	padding-top: 10px;
 }
@@ -169,14 +174,19 @@ html body div#content div#menu_bottom ul#menu_princ li a.selectionne
 	color: #E25050;
 }
 
-html body div#content div#menu_bottom ul#menu_princ li a#jouer img,html body div#content div#menu_bottom ul#menu_princ li a#hiScr img,html body div#content div#menu_bottom ul#menu_princ li a#hist img,html body div#content div#menu_bottom ul#menu_princ li a#htp img
+html body div#content div#menu_bottom ul#menu_princ li a#jouer img,
+html body div#content div#menu_bottom ul#menu_princ li a#hiScr img,
+html body div#content div#menu_bottom ul#menu_princ li a#hist img,
+html body div#content div#menu_bottom ul#menu_princ li a#htp img
 {
 	position: relative;
 	top:20px;
 	right:-5px;
 }
 
-html body div#content div#menu_bottom ul#menu_princ li a#hiScr,html body div#content div#menu_bottom ul#menu_princ li a#hist,html body div#content div#menu_bottom ul#menu_princ li a#htp
+html body div#content div#menu_bottom ul#menu_princ li a#hiScr,
+html body div#content div#menu_bottom ul#menu_princ li a#hist,
+html body div#content div#menu_bottom ul#menu_princ li a#htp
 {
 	position: relative;
 	top: -20px;
@@ -242,4 +252,15 @@ html body div#content div#cont_hiScr table tr.votrePosition td
 html body div#content div#cont_hiScr table tr.votrePosition
 {
 	border: 0px solid #E25050;
+}
+
+html body div#footer
+{
+	display:block;
+	width:960px;
+	margin-top:20px;
+	margin-left:auto;
+	margin-right:auto;
+	margin-bottom:20px;
+	text-align: center;
 }
