@@ -8,7 +8,6 @@ if(redisToGoUrl.auth){
         console.log('Redis store connected.');
     });   
 }
-
  
 module.exports = function(io){
     //Events
@@ -44,15 +43,12 @@ module.exports = function(io){
         this.emit('message', data);
     };
 
-
     var onConsole = function(data){
-        console.log('onConsole');
-        this.log(data); 
+        console.log('onConsole :: ', data); 
     };
 
     var onPlayerInit = function(data){
-        console.log('onPlayerInit');
-        console.log(data);
+        console.log('onPlayerInit', data);
         initializePlayerInRedisStore(data.id);
         attachPlayerInfosToSocket(this, data);
         broadcastPlayerConnected(this);
@@ -60,7 +56,6 @@ module.exports = function(io){
     };
 
     var onPlayerUpdate = function(data){
-        console.log(data);
         this.broadcast.emit(data);  
     };
 
@@ -77,6 +72,7 @@ module.exports = function(io){
                 console.log(err);
                 return;
             }
+            data = JSON.parse(data);
             data.x = 100;
             data.y = 100;
             socket.broadcast.emit('player-connected', data);   
@@ -89,6 +85,7 @@ module.exports = function(io){
                 console.log(err);
                 return;
             }
+            data = JSON.parse(data);
             socket.broadcast.emit('player-disconnected', data);   
         });    
     };
@@ -99,7 +96,7 @@ module.exports = function(io){
             fbId: data.fbId,
             fbName: data.fbName  
         };
-        socket.set('user', user, redisErrorCallback);
+        socket.set('user', JSON.stringify(user), redisErrorCallback);
     };
 
     var initializePlayerInRedisStore = function(id){
@@ -130,8 +127,7 @@ module.exports = function(io){
 
     var redisErrorCallback = function(err){
         if(err){
-            console.log('ERROR:Redis');
-            console.log(err);   
+            console.log('ERROR:Redis ::', err);
         }
     }
 

@@ -36,18 +36,16 @@
         });
 
         socket.on('game-init', function(data){
-            console.log(data); 
+            console.log('game-init :: ', data); 
         });
 
         socket.on('player-connected', function(data){
-            console.log('player-connected');
-            console.log(data); 
+            console.log('player-connected :: ', data);
             Game.playerManager.spawn(data);
         });
 
         socket.on('player-update', function(data){
-            console.log('player-update');
-            console.log(data);
+            console.log('player-update :: ', data);
         });
 
     </script>
