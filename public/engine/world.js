@@ -64,7 +64,7 @@ World.prototype = {
     }
   },
   sortLayers: function(a, b) {
-    return b.z - a.z;
+    return a.z - b.z;
   },
   setLimit: function(x, y, w, h) {
     this.limits = {x: x, y: y, w: w, h: h};
