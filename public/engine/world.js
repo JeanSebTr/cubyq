@@ -39,6 +39,15 @@ World.prototype = {
     }
     this.layers(layers.sort(self.sortLayers));
   },
+  updateTile: function(tile) {
+    var layers = this.layers();
+    var layer = tile.layer;
+    for(var i=0; i<layers.length; i++) {
+      if(layer == layers[i].id) {
+        layers[i].updateTile(tile);
+      }
+    }
+  },
   updateMap: function(part) {
     var layers = this.layers();
     var layer = part.layer;

@@ -48,8 +48,10 @@ function Editor(io, viewport, panel, canvas) {
     maintool: maintool,
     move: ko.computed(function(){ return (maintool() == 'move') }),
     select: ko.computed(function(){ return (maintool() == 'select') }),
-    draw: ko.computed(function(){ return (maintool() == 'draw') })
+    draw: ko.computed(function(){ return (maintool() == 'draw') }),
+    erase: ko.computed(function(){ return (maintool() == 'erase') })
   };
+  this.toolbar.editTile = ko.computed(function(){ return self.toolbar.erase() || self.toolbar.draw(); });
 
   // overlay
   this.canvas = canvas;
@@ -163,9 +165,8 @@ Editor.prototype = {
     var layer = this.currentLayer();
     if(!layer) return;
 
-    console.log(['Send draw tile', x, y]);
-    this.io.emit('drawTile', {
-      tile: tile,
+    this.io.emit(this.toolbar.erase()?'eraseTile':'drawTile', {
+      tile: this.toolbar.erase()?null:tile,
       x: x,
       y: y,
       layer: layer.id
