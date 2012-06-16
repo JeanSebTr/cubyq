@@ -129,30 +129,6 @@ ko.bindingHandlers.draw = {
       , el = $(element)
       , drawing = false
       , last;
-    function save() {
-      var res = {
-          x1: Math.round(start.x),
-          y1: Math.round(start.y),
-          x2: Math.round(end.x),
-          y2: Math.round(end.y)
-        };
-      if(res.x1 > res.x2) {
-        var x = res.x1;
-        res.x1 = res.x2;
-        res.x2 = x;
-      }
-      if(res.y1 > res.y2) {
-        var y = res.y1;
-        res.y1 = res.y2;
-        res.y2 = y;
-      }
-      if(res.x1 == res.x2 || res.y1 == res.y2) {
-        params.rect(false);
-      }
-      else {
-        params.rect(res);
-      }
-    }
     
     el.mousedown(function(e) {
       if(params.active() && !drawing) {

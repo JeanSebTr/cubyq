@@ -8,7 +8,7 @@ var ObjectId = Schema.ObjectId;
 var MapPartSchema = new Schema({
     layer: ObjectId,
     pos: {x: Number, y: Number},
-    tiles: [ObjectId]
+    tiles: [Schema.Types.Mixed]
 });
 MapPartSchema.index({pos: "2d"}, {min: -10000, max: 10000 });
 

@@ -32,7 +32,7 @@ module.exports = function(io){
         console.log('onDisconnect');
         broadcastPlayerDisconnected(this);
         this.get('user', function(err, data){
-            removePlayerFromRedisStore(data.id); 
+            //removePlayerFromRedisStore(data.id); 
         });
     };
 

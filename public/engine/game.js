@@ -19,6 +19,7 @@ function update(now) {
 var need = [];
 
 var Game = {
+  tilesSize: 16,
   init: function(resources, progress, end) {
     var deps = need.concat(resources);
     Game.Load(deps, progress, end);
