@@ -7,10 +7,11 @@
 
     <script>
       var JSGame = {
-        tilesSize: 16;
+        tilesSize: 16
       };
       goog.require('GameEngine');
     </script>
+    <script src="/javascript/knockout-2.1.0.js"></script>
     <script src="/engine/world.js"></script>
     <script src="/engine/tilesets.js"></script>
     <script src="/engine/layer.js"></script>
@@ -43,13 +44,16 @@
             socket.on('player-init', function(data){
                 var x = data.x / Game.globalScale;
                 var y = data.y /Game.globalScale; 
-                Game.player = new game.Player({x: x, y: y});
+                //Game.player = new game.Player({x: x, y: y});
+                Game.player = new game.Player({x: 120, y: 100});
+                // TODO: REMOVE THIS
+                Game.playerManager.spawn({x: 100, y: 100, id: 'CALISS'});
             });
 
             socket.on('game-init', function(data){
 
                 var net = new JSGame.Network(socket);
-                Game.map = new World('4fdcb3c944beb60100000004', net);
+                Game.map = new JSGame.World('4fdcb3c944beb60100000004', net);
 
                 Game.player.id = '<%= user.id %>';
                 socket.on('player-connected', function(data){
@@ -67,6 +71,15 @@
 
             socket.on('player-update', function(data){
                 Game.playerManager.updatePlayer(data);
+            });
+
+            socket.on('player-gameover', function(data){
+                for(var i=0; i< Game.playerManager.objs.length; i++){
+                    if(Game.playerManager.objs[i].id == data.id){
+                        Game.playerManager.objs.splice(i,1);
+                        break;
+                    }
+                }
             });
         });
     </script>

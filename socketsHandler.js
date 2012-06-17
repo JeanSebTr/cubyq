@@ -23,6 +23,8 @@ module.exports = function(io){
         socket.on('disconnect', onDisconnect.bind(socket));
         socket.on('player-init', onPlayerInit.bind(socket));
         socket.on('player-update', onPlayerUpdate.bind(socket));
+        socket.on('player-gameover', onPlayerGameover.bind(socket));
+
         //only one room for now
         joinRoom(socket, 'game:1');
     };
@@ -46,13 +48,6 @@ module.exports = function(io){
     };
 
     var onPlayerInit = function(data){
-        //if(ids[data.id]){
-            //data.id = data.id + 'toto';
-        //}
-        //ids[data.id] = true;
-        //console.log('onPlayerInit :: ', ids);
-
-
         var slips = generateSlips();
         var socket = this;
         initializePlayerInRedisStore(data.id, slips, function(){
@@ -68,6 +63,11 @@ module.exports = function(io){
         data = JSON.parse(data);
         this.broadcast.volatile.emit('player-update', data);
     };
+
+    var onPlayerGameover = function(data){
+        console.log(data);
+        this.broadcast.emit('player-gameover', data);
+    }
 
     //functions
     var joinRoom = function(socket, roomName){
