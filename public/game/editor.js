@@ -188,6 +188,10 @@ JSGame.addState('Editor', {
 
     this.viewport = new JSGame.Viewport(document.getElementById('editor'));
 
+    window.requestAnimationFrame = function(cb) {
+      setTimeout(cb, 1000);
+    };
+
     var panel = $('#panel');
     _io.on('connect', function() {
       self.editor = new Editor(_io, self.viewport, panel, document.getElementById('overlay'));

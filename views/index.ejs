@@ -7,10 +7,11 @@
 
     <script>
       var JSGame = {
-        tilesSize: 16;
+        tilesSize: 16
       };
       goog.require('GameEngine');
     </script>
+    <script src="/javascript/knockout-2.1.0.js"></script>
     <script src="/engine/world.js"></script>
     <script src="/engine/tilesets.js"></script>
     <script src="/engine/layer.js"></script>
@@ -52,7 +53,7 @@
             socket.on('game-init', function(data){
 
                 var net = new JSGame.Network(socket);
-                Game.map = new World('4fdcb3c944beb60100000004', net);
+                Game.map = new JSGame.World('4fdcb3c944beb60100000004', net);
 
                 Game.player.id = '<%= user.id %>';
                 socket.on('player-connected', function(data){
