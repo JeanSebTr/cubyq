@@ -1,6 +1,13 @@
 <!doctype html>
 <html>
 <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Capture de bobettes</title>
+    <script src="/js/afficherBloc.js" type="text/javascript"></script>
+    <link rel="stylesheet" href="/css/reinit.css"/>
+    <link rel="stylesheet" href="/css/test.css" media="screen "/>
+    <link href='http://fonts.googleapis.com/css?family=Bubblegum+Sans' rel='stylesheet' type='text/css' />
+    <link href='http://fonts.googleapis.com/css?family=Karla' rel='stylesheet' type='text/css' />
 <% if(locals.user){ %>
     <script src="/vendor/base.js"></script>
     <script src="/deps.js"></script>
@@ -8,6 +15,12 @@
     <script>
       var JSGame = {
         tilesSize: 16
+      };
+      var userData = {
+        id: '<%= user.id %>',
+        fbId: '<%= user.fb.id %>',
+        fbName: '<%= user.fb.name.full %>',
+        fbFirstName: '<%= user.fb.name.first %>'
       };
       goog.require('GameEngine');
     </script>
@@ -21,36 +34,83 @@
 <% } %>
 </head>
 <body>
-<% if(locals.user){ %>
-    <!-- On doit faire passer le jeu par l'état splash screen -->
+    <h1 class="invisible">Capture de bobettes</h1> <!-- Titre du jeu (ne sera pas affiché dans la page, simplement pour le référencement Google) -->
 
-    <p><%= user.fb.name.full %></p>
+    <div id="content"> <!-- Début de la div de contenu -->
+        <h2>Capture de bobettes</h2> <!-- Noms du jeu qui sera affiché dans la page tel un H1 -->
+        
+        <% if(locals.user){ %>
+        <div id="cont_play" name="cont_hist" class="invisible">
+            <canvas id="canvas" width="800" height="600"></canvas>
+        </div>
+        <% } %>
 
-    <canvas id="canvas" width="800" height="600"></canvas>
-    <script>
-        var socket;
-        var userData = {
-            id: '<%= user.id %>',
-            fbId: '<%= user.fb.id %>',
-            fbName: '<%= user.fb.name.full %>',
-            fbFirstName: '<%= user.fb.name.first %>'
-        };
-        var Game = new GameEngine();
-        Game.init('canvas', function() {
-        Game.changeState(Game.States.initGame);
-        });
-    </script>
-<% }else { %>
-    <h1>Splash Screen / Loading screen</h1>
-
-    <!-- Pour l'instant..... on fera un change state plus tard -->
-    <script>
-        setTimeout(function(){
-            window.location.href = '/login';
-        }, 2000);
-    </script>
-
-<% } %>
+        <div id="cont_hist" name="cont_hist"> <!-- Début de la div de l'histoire -->
+            <h3>Histoire</h3>
+            <p>Vous revenez tout juste d'une importante partie de football.<br/>
+            Vous aviez décidé que ce serait une bonne idée de prendre une bonne douche afin d'y chanter à tout tête vos plus "belles" mélodies.</p>
+            <p>Malheur! À votre sortie de la douche, vous ne retrouvez plus les bobettes fétiches que vous aviez apportées!</p>
+            <p>Parcourez les vestiaires publics afin de retrouver vos bobettes préférées sans vous faire remarquer!</p>
+        </div> <!-- Fin de la div de l'histoire -->
+        
+        <div id="cont_htp" name="cont_htp" class="invisible"> <!-- Début de la div du comment jouer (How To Play) -->
+            <h3>Instructions</h3>
+            <div id="ordi">
+                <!--<h4>Sur votre ordinateur :</h4>-->
+                <p>Déplacez vous à l'aide des touches A (gauche), S (bas), W (haut) et D (droite) de votre clavier;</p>
+                <!--<p>Visez vos adversaires à l'aide des touches A (gauche) et D (droite);</p>-->
+                <p>Récoltez ou déposez des bobettes en appuyant sur la barre d'espacement;</p><br/>
+            </div>
+            
+            <!--<div id="tab_electro">
+                <h4>Sur votre tablette électronique :</h4>
+                <p>Déplacez vous à travers le décor en appuyant puis en glissant votre pouce gauche sur l'écran. Un joystick virtuel devrait alors apparaître;</p>
+                <p>Visez et tirez sur vos adversaires, récoltez les objets au sol en appuyant n'importe où sur l'écran avec votre pouce droit ou votre index;</p><br/>
+            </div>-->
+            
+            <p>Tentez de retrouver vos bobettes le plus rapidement possible sans vous faire remarquer;</p>
+            <p>Amusez-vous!</p>
+        </div> <!-- Fin de la div du comment jouer (How To Play) -->
+        
+        <div id="cont_desc" name="cont_desc"> <!-- Début de la div de droite, celle du contenu descriptif -->
+            <h4>Crédits :</h4>
+            <p id="logos">
+                <span class="logo_desc"><img src="images/logo_bivouac.png" alt="Bivouac Boulevard Scion 2012" title="Bivouac Boulevard Scion 2012"/><span class="desc1"><strong><a href="http://bivouacurbain.com/" target="_blank">Bivouac Urbain 2012</a></strong><br/>Boulevard Scion</span></span>
+                <span class="logo_desc"><img id="cubyq" src="images/logo_cubyq.png" alt="Cubyq" title="Cubyq"/></span>
+            </p>
+            <p><strong>Produit par l'équipe CUBYQ :</strong></p>
+            <ul>
+                <li><a href="http://www.twitter.com/jeansebtr" target="_blank">Jean-Sébastien Tremblay</a></li>
+                <li><a href="http://www.twitter.com/jackdbernier" target="_blank">Jacques-Olivier D. Bernier</a></li>
+                <li><a href="http://www.twitter.com/alain_gilbert" target="_blank">Alain Gilbert</a></li>
+                <li><a href="mailto:pierremoreau@lagammik.com" target="_blank">Pierre Moreau</a></li>
+                <li><a href="mailto:m_bilodeau@hotmail.ca" target="_blank">Melanie Bilodeau</a></li>
+            </ul><br/>
+            <p><strong>Dans le cadre du concours annuel de création de jeux vidéos, le Bivouac Urbain</strong></p>
+            <p><strong>Produit les 14, 15 et 16 juin 2012</strong></p>
+        </div> <!-- Fin de la div de droite, celle du contenu descriptif -->
+        
+        <div id="menu_bottom"> <!-- Début de la div menu_bottom -->
+            <ul id="menu_princ"> <!-- Début de la liste menu_princ -->
+                <% if(locals.user){ %>
+                <li><a id="jouer" href="javascript:changerdiv0()">Jouer<img src="images/play.png" alt="jouer"/></a></li>
+                <% } else { %>
+                <li><a id="jouer" href="/auth/facebook">Jouer<img src="images/play.png" alt="jouer"/></a></li>
+                <% } %>
+                <li><a id="hist" href="javascript:changerdiv1()" class="selectionne">Histoire<img src="images/livre02.png" alt="histoire"/></a></li>
+                <li><a id="htp" href="javascript:changerdiv2()">Instructions<img src="images/touches.png" alt="instructions"/></a></li>
+            </ul> <!-- Fin de la liste menu_princ -->
+        </div> <!-- Fin de la div menu_bottom -->
+        
+        <div id="img_pres"> <!-- Début de la div img_pres -->
+            <img src="images/bobette01.png" alt="Capture de bobettes" title="Capture de bobettes"/>
+        </div> <!-- Fin de la div img_pres -->
+        
+        </div><!-- Fin de la div de contenu -->
+    
+   <div id="footer">
+        <p>© CUBYQ, juin 2012<br/>Tous droits réservés</p>
+   </div>
 
 </body>
 </html>
