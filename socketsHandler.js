@@ -108,7 +108,8 @@ module.exports = function(io){
                 return;
             }
             data = JSON.parse(data);
-            socket.broadcast.emit('player-disconnected', data);   
+            socket.broadcast.emit('player-disconnected', data);  
+            socket.broadcast.emit('player-gameover', data);   
         });    
     };
 
