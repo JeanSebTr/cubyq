@@ -37,7 +37,7 @@ function Editor(io, viewport, panel, canvas) {
       self.viewport.setWorld(null);
     }
     else {
-      var world = new Game.World(map._id, self.gameNet);
+      var world = new JSGame.World(map._id, self.gameNet);
       self.viewport.setWorld(world);
     }
   });
@@ -177,16 +177,16 @@ Editor.prototype = {
   }
 };
 
-Game.addState('Editor', {
+JSGame.addState('Editor', {
   resources: [
     
   ],
   init: function(callback) {
     var self = this
       , _io = io.connect();
-    var net = new Game.Network(_io);
+    var net = new JSGame.Network(_io);
 
-    this.viewport = new Game.Viewport(document.getElementById('editor'));
+    this.viewport = new JSGame.Viewport(document.getElementById('editor'));
 
     var panel = $('#panel');
     _io.on('connect', function() {
