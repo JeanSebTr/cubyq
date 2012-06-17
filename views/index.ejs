@@ -20,54 +20,15 @@
     <canvas id="canvas" width="800" height="600"></canvas>
     <script>
         var socket;
+        var userData = {
+            id: '<%= user.id %>',
+            fbId: '<%= user.fb.id %>',
+            fbName: '<%= user.fb.name.full %>',
+            fbFirstName: '<%= user.fb.name.first %>'
+        };
         var Game = new GameEngine();
         Game.init('canvas', function() {
-            socket = io.connect('/');
-            socket.on('connect', function (data) {
-                var data = {
-                    id: '<%= user.id %>',
-                    fbId: '<%= user.fb.id %>',
-                    fbName: '<%= user.fb.name.full %>'
-                };
-                socket.emit('player-init', data); 
-            });
-
-            socket.on('player-init', function(data){
-                var x = data.x / Game.globalScale;
-                var y = data.y /Game.globalScale; 
-                Game.player = new game.Player({x: 30, y: 100});
-                // TODO: REMOVE THIS
-                Game.playerManager.spawn({x: 100, y: 100, id: 'CALISS'});
-            });
-
-            socket.on('game-init', function(data){
-                Game.player.id = '<%= user.id %>';
-                socket.on('player-connected', function(data){
-                    console.log('player-connected :: ', data);
-                    Game.playerManager.spawn(data);
-                });
-
-                console.log('game-init :: ', data);
-
-                for(var i =0; i< data.length; i++){
-                   Game.playerManager.spawn(data[i]); 
-                }
-
-            });
-
-            socket.on('player-update', function(data){
-                Game.playerManager.updatePlayer(data);
-            });
-
-            socket.on('player-gameover', function(data){
-                console.log('player-gameover :: ', data.id);
-                for(var i=0; i< Game.playerManager.objs.length; i++){
-                    if(Game.playerManager.objs[i].id == data.id){
-                        Game.playerManager.objs.splice(i,1);
-                        break;
-                    }
-                }
-            });
+            Game.changeState(Game.States.initGame);
         });
     </script>
 <% }else { %>

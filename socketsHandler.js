@@ -117,6 +117,7 @@ module.exports = function(io){
             id: data.id,
             fbId: data.fbId,
             fbName: data.fbName,
+            fbFirstName: data.fbFirstName,
             slips: data.slips
         };
         socket.set('user', JSON.stringify(user), callback);
