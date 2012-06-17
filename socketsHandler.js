@@ -50,7 +50,8 @@ module.exports = function(io){
     var onPlayerInit = function(data){
         var slips = generateSlips();
         var socket = this;
-        initializePlayerInRedisStore(data.id, slips, function(){
+        console.log(data);
+        initializePlayerInRedisStore(data, slips, function(){
             data.slips = slips;
             attachPlayerInfosToSocket(socket, data, function(){
                 broadcastPlayerConnected(socket);
@@ -124,18 +125,19 @@ module.exports = function(io){
         socket.set('user', JSON.stringify(user), callback);
     };
 
-    var initializePlayerInRedisStore = function(id, slips, callback){
-        var hash = 'user:' + id;
+    var initializePlayerInRedisStore = function(data, slips, callback){
+        var hash = 'user:' + data.id;
         var params = [
             hash,
-            'id', id,
+            'id', data.id,
             'x' , 10, 
             'y', 10,
             'vel', 0,
             'points', 0,
             'radius', 25,
             'state', 0,
-            'slips', slips
+            'slips', slips,
+            'fbName', data.fbName
         ];
         redisStore.hmset(params, function(){
             callback()
