@@ -55,7 +55,7 @@ module.exports = function(io){
             attachPlayerInfosToSocket(socket, data, function(){
                 broadcastPlayerConnected(socket);
                 emitGameInit(socket); 
-            }); 
+            });
         });
     };
 
@@ -65,9 +65,10 @@ module.exports = function(io){
     };
 
     var onPlayerGameover = function(data){
-        console.log(data);
         data = JSON.parse(data);
+        console.log(data);
         this.broadcast.volatile.emit('player-gameover', data);
+        removePlayerFromRedisStore(data.id);
     }
 
     //functions
