@@ -1,10 +1,10 @@
 
-var Game;
+var JSGame;
 (function() {
 
 function Viewport(canvas) {
 	var self = this;
-	this.tilesSize = Game.tilesSize;
+	this.tilesSize = JSGame.tilesSize;
 	this.viewRatio = 2.1;
 
 	// main canvas
@@ -65,5 +65,5 @@ Viewport.prototype = {
 	}
 };
 
-Game.Viewport = Viewport;
+JSGame.Viewport = Viewport;
 })();

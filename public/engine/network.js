@@ -1,5 +1,5 @@
 
-var Game;
+var JSGame;
 
 (function() {
 
@@ -70,5 +70,5 @@ Network.prototype = {
 };
 
 
-Game.Network = Network;
+JSGame.Network = Network;
 })();

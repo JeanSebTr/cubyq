@@ -4,9 +4,17 @@
 <% if(locals.user){ %>
     <script src="/vendor/base.js"></script>
     <script src="/deps.js"></script>
+
     <script>
+      var JSGame = {
+        tilesSize: 16;
+      };
       goog.require('GameEngine');
     </script>
+    <script src="/engine/world.js"></script>
+    <script src="/engine/tilesets.js"></script>
+    <script src="/engine/layer.js"></script>
+    <script src="/engine/network.js"></script>
 
     <script src="/socket.io/socket.io.js"></script>
 <% } %>
@@ -42,6 +50,10 @@
             });
 
             socket.on('game-init', function(data){
+
+                var net = new JSGame.Network(socket);
+                Game.map = new World('4fdcb3c944beb60100000004', net);
+
                 Game.player.id = '<%= user.id %>';
                 socket.on('player-connected', function(data){
                     console.log('player-connected :: ', data);

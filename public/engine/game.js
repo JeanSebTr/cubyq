@@ -83,5 +83,5 @@ Game.COLLIDE_WITH     = 0x02;
 Game.ENTITY_REMOVED   = 0x04;
 Game.ENTITY_DRAWABLE  = 0x08;
 
-window.Game = Game;
+window.JSGame = Game;
 })();
