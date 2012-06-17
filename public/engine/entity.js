@@ -1,4 +1,4 @@
-var Game;
+var JSGame;
 (function() {
 
 function Entity(init) {
@@ -12,6 +12,6 @@ Entity.prototype = {
   collide: function(entity) {}
 };
 
-Game.Entity = Entity;
+JSGame.Entity = Entity;
 
 })();

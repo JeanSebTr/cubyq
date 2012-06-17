@@ -1,5 +1,5 @@
 
-var Game;
+var JSGame;
 (function() {
 
 function World(id, provider) {
@@ -14,7 +14,7 @@ function World(id, provider) {
   provider.listLayers(id, function(layers) {
     var res = [];
     layers.forEach(function(layer) {
-      var _layer = new Game.Layer(layer, self);
+      var _layer = new JSGame.Layer(layer, self);
       self.addLayer(_layer);
       res.push(_layer);
     });
@@ -61,8 +61,8 @@ World.prototype = {
     var ctx = opts.ctx;
     var x = opts.x || 0;
     var y = opts.y || 0;
-    var w = opts.w || Game.tilesSize;
-    var h = opts.h || Game.tilesSize;
+    var w = opts.w || JSGame.tilesSize;
+    var h = opts.h || JSGame.tilesSize;
     var from = opts.from || 0;
     var to = opts.to || 10000;
     var layers = this.layers();
@@ -84,5 +84,5 @@ World.prototype = {
   }
 };
 
-Game.World = World;
+JSGame.World = World;
 })();

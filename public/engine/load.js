@@ -1,11 +1,11 @@
-var Game;
+var JSGame;
 
 (function() {
 
 var cache = {};
 var loadZone;
 
-Game.Load = function(data, progress, end) {
+JSGame.Load = function(data, progress, end) {
   /*for(var i=0; i<data.length; i++) {
     var res = data[i];
     if(!cache[res.file]) {
