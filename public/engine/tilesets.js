@@ -1,5 +1,5 @@
 
-var Game;
+var JSGame;
 (function () {
 
 var _tilesets = {};
@@ -36,6 +36,6 @@ var Tilesets = {
     }
 };
 
-Game.Tilesets = Tilesets;
+JSGame.Tilesets = Tilesets;
 })();
 

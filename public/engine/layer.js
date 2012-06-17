@@ -1,5 +1,5 @@
 
-var Game;
+var JSGame;
 (function() {
 
 function Layer(layer, map) {
@@ -8,11 +8,9 @@ function Layer(layer, map) {
 	this.map = map;
 	this.name = ko.observable(layer.name);
 	this.canvas = document.createElement('canvas');
-    this.canvas.width = 10*Game.tilesSize;
-    this.canvas.height = 10*Game.tilesSize;
+    this.canvas.width = 10*JSGame.tilesSize;
+    this.canvas.height = 10*JSGame.tilesSize;
     this.ctx = this.canvas.getContext('2d');
-
-    $('#tilesets').append(this.canvas);
 
     this.x = 0;
     this.y = 0;
@@ -49,7 +47,7 @@ Layer.prototype = {
         this.name(layer.name);
     },
     render: function(ctx, x, y, w, h) {
-        var _x = x - this.x*Game.tilesSize;
+        var _x = x - this.x*JSGame.tilesSize;
         var sx, dx, dw;
         if(_x<0) {
             sx = 0;
@@ -59,7 +57,7 @@ Layer.prototype = {
             sx = _x;
             dx = 0;
         }
-        var _y = y - this.y*Game.tilesSize;
+        var _y = y - this.y*JSGame.tilesSize;
         if(_y<0) {
             sy = 0;
             dy = y-_y;
@@ -90,10 +88,9 @@ Layer.prototype = {
             this.canvas.width = this.canvas.width + dx;
             this.ctx.putImageData(data, dx*Game.tilesSize, 0);
         }*/
-        if(x > this.x + (this.canvas.width/Game.tilesSize)-1) {
-            console.log(['Size up X', this.x, x]);
+        if(x > this.x + (this.canvas.width/JSGame.tilesSize)-1) {
             var data = this.ctx.getImageData(0, 0, this.canvas.width, this.canvas.height);
-            this.canvas.width = (x - this.x + 1)*Game.tilesSize;
+            this.canvas.width = (x - this.x + 1)*JSGame.tilesSize;
             this.ctx.putImageData(data, 0, 0);
         }
         /*if(y < this.y) {
@@ -103,25 +100,24 @@ Layer.prototype = {
             this.canvas.height = this.canvas.height + dy;
             this.ctx.putImageData(data, 0, dy*Game.tilesSize);
         }*/
-        if(y > this.y + (this.canvas.height/Game.tilesSize)-1) {
-            console.log(['Size up Y', this.y, y]);
+        if(y > this.y + (this.canvas.height/JSGame.tilesSize)-1) {
             var data = this.ctx.getImageData(0, 0, this.canvas.width, this.canvas.height);
-            this.canvas.height = (y - this.y + 1)*Game.tilesSize;
+            this.canvas.height = (y - this.y + 1)*JSGame.tilesSize;
             this.ctx.putImageData(data, 0, 0);
         }
         var self = this;
         if(!tile) {
-            self.ctx.clearRect(x*Game.tilesSize, y*Game.tilesSize, Game.tilesSize, Game.tilesSize);
+            self.ctx.clearRect(x*JSGame.tilesSize, y*JSGame.tilesSize, JSGame.tilesSize, JSGame.tilesSize);
         }
         else {
-            Game.Tilesets.get(tile.tileset || tile.id, function(img) {
-                self.ctx.clearRect(x*Game.tilesSize, y*Game.tilesSize, Game.tilesSize, Game.tilesSize);
-                self.ctx.drawImage(img, tile.x*Game.tilesSize, tile.y*Game.tilesSize, Game.tilesSize, Game.tilesSize,
-                    x*Game.tilesSize, y*Game.tilesSize, Game.tilesSize, Game.tilesSize);
+            JSGame.Tilesets.get(tile.tileset || tile.id, function(img) {
+                self.ctx.clearRect(x*JSGame.tilesSize, y*JSGame.tilesSize, JSGame.tilesSize, JSGame.tilesSize);
+                self.ctx.drawImage(img, tile.x*JSGame.tilesSize, tile.y*JSGame.tilesSize, JSGame.tilesSize, JSGame.tilesSize,
+                    x*JSGame.tilesSize, y*JSGame.tilesSize, JSGame.tilesSize, JSGame.tilesSize);
             });
         }
     }
 };
 
-Game.Layer = Layer;
+JSGame.Layer = Layer;
 })();
