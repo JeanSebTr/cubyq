@@ -36,15 +36,19 @@
                 var x = data.x / Game.globalScale;
                 var y = data.y /Game.globalScale; 
                 Game.player = new game.Player({x: 30, y: 100});
+
                 // TODO: REMOVE THIS
                 Game.playerManager.spawn({x: 100, y: 100, id: 'CALISS'});
+                Game.bobetteManager.spawn({ownerId: 'CALISS', x: 100, y: 160})
             });
 
             socket.on('game-init', function(data){
                 Game.player.id = '<%= user.id %>';
+
                 socket.on('player-connected', function(data){
                     console.log('player-connected :: ', data);
                     Game.playerManager.spawn(data);
+                    Game.bobetteManager.spawn({ownerId: data.id, x: data.slips.x, y: data.slips.y})
                 });
 
                 console.log('game-init :: ', data);
