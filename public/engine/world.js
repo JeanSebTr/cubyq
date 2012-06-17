@@ -48,12 +48,12 @@ World.prototype = {
       }
     }
   },
-  updateMap: function(part) {
+  updateMap: function(data) {
     var layers = this.layers();
-    var layer = part.layer;
+    var layer = data.layer;
     for(var i=0; i<layers.length; i++) {
       if(layer == layers[i].id) {
-        layers[i].addPart(part);
+        layers[i].addTiles(data.tiles);
       }
     }
   },
