@@ -61,6 +61,7 @@
             });
 
             socket.on('player-gameover', function(data){
+                console.log('player-gameover :: ', data.id);
                 for(var i=0; i< Game.playerManager.objs.length; i++){
                     if(Game.playerManager.objs[i].id == data.id){
                         Game.playerManager.objs.splice(i,1);
