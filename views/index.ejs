@@ -36,6 +36,8 @@
                 var x = data.x / Game.globalScale;
                 var y = data.y /Game.globalScale; 
                 Game.player = new game.Player({x: x, y: y});
+                // TODO: REMOVE THIS
+                Game.playerManager.spawn({x: 100, y: 100, id: 'CALISS'});
             });
 
             socket.on('game-init', function(data){
@@ -54,7 +56,6 @@
             });
 
             socket.on('player-update', function(data){
-                console.log(data.shamePoints, data.disgustPoints, data.slipsId);
                 Game.playerManager.updatePlayer(data);
             });
         });
