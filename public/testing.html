@@ -2,39 +2,52 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+<!--<meta name="viewport" content="initial-scale=0.5, user-scalable=no" />-->
 <title>Capture de bobettes</title>
 <script src="js/afficherBloc.js" type="text/javascript"></script>
-<script>
-window.onresize=chargerImg;
-
-function chargerImg()
+<!--<script>
+window.onorientationchange = function() 
 {
-	//alert(window.outerWidth);
-	var strPourcent ="";
-	if(window.outerWidth <= 320)
-	{
+	//alert("Changement");
+	var strPourcent = "";
+	window.onorientationchange = function() {
+  var orientation = window.orientation;
+  switch(orientation) {
+    case 0:
 		strPourcent = "";
-		alert("Plus petit que 320px");
-	}
-	else if (window.outerWidth <= 720)
-	{
-		alert("Entre 320px et 720px");
+        /*document.body.setAttribute("class","portrait");
+        document.getElementById("currentOrientation").innerHTML="Now in portrait orientation (Home button on the bottom).";*/
+        break; 
+       
+    case 90:
 		strPourcent = "50";
-	}
-	else
-	{
-		alert("Plus grand que 720px");
-		strPourcent = "";
-	}
-	
+       /* document.body.setAttribute("class","landscapeLeft");
+        document.getElementById("currentOrientation").innerHTML="Now in landscape orientation and turned to the left (Home button to the right).";*/
+        break;
+   
+    case -90:
+		strPourcent = "50"; 
+        /*document.body.setAttribute("class","landscapeRight");
+        document.getElementById("currentOrientation").innerHTML="Now in landscape orientation and turned to the right (Home button to the left).";*/
+        break;
+  }
 }
-</script>
+	
+	document.getElementById("imgJouer").src = "images/play"+strPourcent+".png";
+	document.getElementById("imgHist").src = "images/livre02"+strPourcent+".png";
+	document.getElementById("imgHTP").src = "images/touches"+strPourcent+".png";
+	document.getElementById("imgHiScr").src = "images/trophee"+strPourcent+".png";
+	document.getElementById("imgCredits").src = "images/trophee"+strPourcent+".png";
+	//document.getElementById("imgRetour").src = "images/retour"+strPourcent+".png";
+	document.getElementById("imgLogoBU").src = "images/logo_bivouac"+strPourcent+".png";
+	document.getElementById("imgLogoCUBYQ").src = "images/logo_cubyq"+strPourcent+".png";
+}
+</script>-->
 
 <link rel="stylesheet" href="css/reinit.css"/>
-<link rel="stylesheet" href="css/style_mini.css" media="screen and (max-width: 320px)"/> <!---->
-<link rel="stylesheet" href="css/style_med.css" media="screen and (min-width: 321px) and (max-width: 640px)"/>
-<link rel="stylesheet" href="css/test.css" media="screen and (min-width: 641px)"/>
+<!--<link rel="stylesheet" href="css/style_mini.css" media="screen and (max-width: 320px)"/>
+<link rel="stylesheet" href="css/style_med.css" media="screen and (min-width: 321px) and (max-width: 640px)"/>and (min-width: 641px)-->
+<link rel="stylesheet" href="css/test.css" media="screen "/>
 <link href='http://fonts.googleapis.com/css?family=Bubblegum+Sans' rel='stylesheet' type='text/css'>
 <link href='http://fonts.googleapis.com/css?family=Karla' rel='stylesheet' type='text/css'>
 </head>
@@ -171,11 +184,11 @@ function chargerImg()
     
       <div id="menu_bottom"> <!-- Début de la div menu_bottom -->
             <ul id="menu_princ"> <!-- Début de la liste menu_princ -->
-            	<li id="debut_liste"><a id="jouer_phone" href="#">Jouer<img src="images/play.png" alt="jouer"/></a></li><br/>
-                <li><a id="hist_phone" href="#cont_hist_phone" class="selectionne">Histoire<img src="images/livre02.png" alt="histoire"/></a></li>
-                <li><a id="htp_phone" href="#cont_htp_phone">Instructions<img src="images/touches.png" alt="instructions"/></a></li><br/>
-                <li><a id="hiScr_phone" href="#cont_hiScr_phone">Pointages<img src="images/trophee.png" alt="pointages"/></a></li>
-                <li><a id="credits_phone" href="#cont_desc_phone">Crédits<img src="images/trophee.png" alt="credits"/></a></li>
+            	<li id="debut_liste"><a id="jouer_phone" href="#">Jouer<img id="imgJouer" src="images/play.png" alt="jouer"/></a></li><br/>
+                <li><a id="hist_phone" href="#cont_hist_phone" class="selectionne">Histoire<img id="imgHist" src="images/livre02.png" alt="histoire"/></a></li>
+                <li><a id="htp_phone" href="#cont_htp_phone">Instructions<img id="imgHTP" src="images/touches.png" alt="instructions"/></a></li><br/>
+                <li><a id="hiScr_phone" href="#cont_hiScr_phone">Pointages<img id="imgHiScr" src="images/trophee.png" alt="pointages"/></a></li>
+                <li><a id="credits_phone" href="#cont_desc_phone">Crédits<img id="imgCredits" src="images/trophee.png" alt="credits"/></a></li>
                 
             </ul> <!-- Fin de la liste menu_princ -->
         </div> <!-- Fin de la div menu_bottom -->
@@ -186,7 +199,7 @@ function chargerImg()
             Vous aviez décidé que ce serait une bonne idée de prendre une bonne douche afin d'y chanter à tout tête vos plus "belles" mélodies.</p>
             <p>Malheur! À votre sortie de la douche, vous ne retrouvez plus les bobettes fétiches que vous aviez apportées!</p>
             <p>Parcourez les vestiaires publics afin de retrouver vos bobettes préférées sans vous faire remarquer!</p><br/>
-            <a class="redirect" href="#top">Retour au menu <img src="images/retour.png" alt="Retour au haut"/></a>
+            <a class="redirect" href="#top">Retour au menu <img id="" src="images/retour.png" alt="Retour au haut"/></a>
         </div> <!-- Fin de la div de l'histoire -->
         
         <div id="cont_htp_phone" name="cont_htp_phone"> <!-- Début de la div du comment jouer (How To Play) -->
@@ -259,7 +272,7 @@ function chargerImg()
         <div id="cont_desc_phone" name="cont_desc_phone"> <!-- Début de la div de droite, celle du contenu descriptif -->
         	<h3>Crédits :</h3>
         	<p id="logos">
-            	<span class="logo_desc"><span class="desc"><strong><a href="http://bivouacurbain.com/" target="_blank">Bivouac Urbain 2012</a></strong><br/>Boulevard Scion</span><img src="images/logo_bivouac.png" alt="Bivouac Boulevard Scion 2012" title="Bivouac Boulevard Scion 2012"/></span>
+            	<span class="logo_desc"><span class="desc"><strong><a href="http://bivouacurbain.com/" target="_blank">Bivouac Urbain 2012</a></strong><br/>Boulevard Scion</span><img id="imgLogoBU" src="images/logo_bivouac.png" alt="Bivouac Boulevard Scion 2012" title="Bivouac Boulevard Scion 2012"/></span>
             	<span class="logo_desc"><span class="desc"><strong>L'équipe CUBYQ</strong><br/>Ste-Foy, Qc</span><img id="cubyq" src="images/logo_cubyq.png" alt="Cubyq" title="Cubyq"/></span>
             </p>
             <p><strong>Produit par l'équipe CUBYQ :</strong></p>
