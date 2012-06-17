@@ -1,4 +1,4 @@
-var Game;
+var JSGame;
 
 (function() {
 
@@ -7,8 +7,8 @@ function Sprite() {
 }
 
 
-Game.createSprite = function(path, w, h) {
+JSGame.createSprite = function(path, w, h) {
   
 };
-Game.Sprite = Sprite;
+JSGame.Sprite = Sprite;
 })();
