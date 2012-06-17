@@ -35,8 +35,7 @@
             socket.on('player-init', function(data){
                 var x = data.x / Game.globalScale;
                 var y = data.y /Game.globalScale; 
-                //Game.player = new game.Player({x: x, y: y});
-                Game.player = new game.Player({x: 120, y: 100});
+                Game.player = new game.Player({x: 30, y: 100});
                 // TODO: REMOVE THIS
                 Game.playerManager.spawn({x: 100, y: 100, id: 'CALISS'});
             });
