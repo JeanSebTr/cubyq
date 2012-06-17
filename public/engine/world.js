@@ -2,8 +2,12 @@
 var JSGame;
 (function() {
 
-function World(id, provider) {
+function World(id, provider, ready) {
   self = this;
+
+  if(ready) {
+    this.ready = ready;
+  }
 
   this.id = id;
 
@@ -12,19 +16,14 @@ function World(id, provider) {
 
   this.provider = provider;
   provider.listLayers(id, function(layers) {
-    var res = [];
     layers.forEach(function(layer) {
-      var _layer = new JSGame.Layer(layer, self);
-      self.addLayer(_layer);
-      res.push(_layer);
+      self.addLayer(new JSGame.Layer(layer, self));
     });
-    self.layers(res.sort(self.sortLayers));
   });
   provider.addWorld(this);
 }
 World.prototype = {
   addLayer: function(layer) {
-    console.log('Add layer', layer.id);
     var layers = this.layers();
     layers.push(layer);
     this.provider.getLayer(layer.id);
@@ -49,12 +48,21 @@ World.prototype = {
     }
   },
   updateMap: function(data) {
+    var ready = true;
     var layers = this.layers();
     var layer = data.layer;
     for(var i=0; i<layers.length; i++) {
       if(layer == layers[i].id) {
+        layers[i].loaded = true;
         layers[i].addTiles(data.tiles);
       }
+      if(!layers[i].loaded) {
+        ready = false;
+      }
+    }
+    if(ready && this.ready) {
+      this.ready();
+      this.ready = null;
     }
   },
   render: function(opts) {
