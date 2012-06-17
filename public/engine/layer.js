@@ -21,17 +21,19 @@ function Layer(layer, map) {
 }
 
 Layer.prototype = {
-    addPart: function(part) {
-        var tiles = part.tiles;
-        var pX = part.pos.x;
-        var pY = part.pos.y;
+    addTiles: function(tiles) {
+        console.log('Got '+tiles.length+' tiles');
         for(var i=0; i<tiles.length; i++) {
             if(tiles[i]) {
-                var x = i%10;
-                var y = ((i-x)/10)+pY;
-                x+=pX;
-                this.tiles[x+':'+y] = tiles[i];
-                this.preDraw(x, y, tiles[i]);
+                var tile = tiles[i];
+                var x = tile.pos.x;
+                var y = tile.pos.y;
+                this.preDraw(x, y,
+                    this.tiles[x+':'+y] = {
+                        x: tile.tilepos.x,
+                        y: tile.tilepos.y,
+                        tileset: tile.tileset
+                    });
             }
         }
     },

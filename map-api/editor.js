@@ -4,78 +4,18 @@ var Map = mongoose.model('Map');
 var MapLayer = mongoose.model('MapLayer');
 var Tileset = mongoose.model('TileSet');
 var MapPart = mongoose.model('MapPart');
+var Tile = mongoose.model('Tile');
 
 module.exports = function(io) {
 
-	function saveTiles(part, map) {
-		part.save(function(err) {
+	function updatedFromLayer(layer, tile) {
+		MapLayer.findById(layer, function(err, doc) {
 			if(err) {
-				console.log("Can't save map part :", err);
+				console.log('Error getting layer', err);
 			}
-			else {
-				io.sockets.in('map:'+map).emit('updateMap', {
-					map: map,
-					part: part.toObject()
-				});
-			}
-		});
-	}
-
-	function updateTile(tile) {
-		var x = Math.floor(tile.x/10)*10;
-		var y = Math.floor(tile.y/10)*10;
-		var i = ((tile.y-y)%10)*10+((tile.x-x)%10);
-		var update = {};
-		update['tiles.'+i] = tile.tile;
-		MapPart.update({
-			layer: tile.layer,
-			'pos.x': Math.floor(tile.x/10)*10,
-			'pos.y': Math.floor(tile.y/10)*10
-		}, update, function(err, nb) {
-			if(err) {
-				console.log('Error updating tile :',err);
-			}
-			else if(nb) {
-				MapLayer.findById(tile.layer, function(err, layer) {
-					if(!err && layer) {
-						tile.map = layer.map.toString();
-						io.sockets.in('map:'+layer.map).emit('updateTile', tile);
-					}
-					else {
-						console.log('Layer not found :', tile.layer, err);
-					}
-				});
-			}
-		});
-	}
-
-	function drawTile(draw, layer) {
-		var x = Math.floor(draw.x/10)*10;
-		var y = Math.floor(draw.y/10)*10;
-
-		MapPart.findOne({
-			layer: layer._id,
-			'pos.x': x,
-			'pos.y': y
-		}, function(err, part) {
-			if(err) {
-				console.log("Can't load map part", err);
-				return;
-			}
-			else if(!part) {
-				part = new MapPart();
-				part.layer = layer._id;
-				part.pos = {
-					x: x,
-					y: y
-				};
-				part.tiles = new Array(100); // 10x10 tiles / part
-				part.save(function(err) {
-					updateTile(draw);
-				});
-			}
-			else {
-				updateTile(draw);
+			else if(doc) {
+				tile.map = doc.map;
+				io.sockets.in('map:'+doc.map).emit('updateTile', tile);
 			}
 		});
 	}
@@ -174,20 +114,66 @@ module.exports = function(io) {
 			});
 		},
 		eraseTile: function(tile) {
-			updateTile(tile)
-		},
-		drawTile: function(tile) {
-			MapLayer.findById(tile.layer, function(err, layer) {
-				if(err || !layer || !tile.tile) {
-					console.log("Can't find layer", tile.layer, err);
+			Tile.findOne({
+				layer: tile.layer,
+				'pos.x': Math.floor(tile.x),
+				'pos.y': Math.floor(tile.y)
+			}, function(err, doc) {
+				if(err) {
+					console.log('Error getting tile', err);
 				}
-				else {
-					Tileset.findById(tile.tile.id, function(err, tileset) {
-						if(err || !tileset) {
-							console.log("Can't find tileset", tile.tile.id, err);
+				else if(doc) {
+					doc.remove(function(err) {
+						if(err) {
+							console.log('Error erasing tile', err);
 						}
 						else {
-							drawTile(tile, layer);
+							updatedFromLayer(tile.layer, tile);
+						}
+					});
+				}
+				else {
+					// no tile here notify deletion
+					updatedFromLayer(tile.layer, tile);
+				}
+			});
+		},
+		drawTile: function(tile) {
+			Tile.findOne({
+				layer: tile.layer,
+				'pos.x': Math.floor(tile.x),
+				'pos.y': Math.floor(tile.y)
+			}, function(err, doc) {
+				if(err) {
+					console.log('Error getting tile', err);
+				}
+				else if(doc) {
+					doc.tileset = tile.tile.tileset || tile.tile.id;
+					doc.tilepos.x = tile.tile.x;
+					doc.tilepos.y = tile.tile.y;
+					doc.save(function(err){
+						if(err) {
+							console.log('Error creating tile :', err);
+						}
+						else {
+							updatedFromLayer(tile.layer, tile);
+						}
+					});
+				}
+				else {
+					doc = new Tile();
+					doc.layer = tile.layer;
+					doc.pos.x = Math.floor(tile.x);
+					doc.pos.y = Math.floor(tile.y);
+					doc.tileset = tile.tile.tileset || tile.tile.id;
+					doc.tilepos.x = tile.tile.x;
+					doc.tilepos.y = tile.tile.y;
+					doc.save(function(err) {
+						if(err) {
+							console.log('Error creating tile :', err);
+						}
+						else {
+							updatedFromLayer(tile.layer, tile);
 						}
 					});
 				}

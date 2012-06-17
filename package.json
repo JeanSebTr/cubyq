@@ -1,18 +1,22 @@
 {
-    "name": "cubyq",
-    "version": "0.0.1",
-    "private": true,
-    "dependencies": {
-        "express": "2.5.x",
-        "stylus": "0.27.1",
-        "ejs": ">= 0.0.1",
-        "socket.io": "latest",
-        "mongoose": ">= 2.6.4",
-        "mongoose-auth": ">= 0.0.12",
-        "everyauth": ">= 0.2.32"
-    },
-    "engines": {
-        "node": ">= 0.6.x",
-        "npm": "1.1.x"
-    }
+  "name": "cubyq",
+  "version": "0.0.1",
+  "private": true,
+  "dependencies": {
+    "express": "2.5.x",
+    "stylus": "0.27.1",
+    "ejs": ">= 0.0.1",
+    "socket.io": "latest",
+    "mongoose": ">= 2.6.4",
+    "mongoose-auth": ">= 0.0.12",
+    "everyauth": ">= 0.2.32"
+  },
+  "engines": {
+    "node": ">= 0.6.x",
+    "npm": "1.1.x"
+  },
+  "subdomain": "cubyq",
+  "scripts": {
+    "start": "app.js"
+  }
 }

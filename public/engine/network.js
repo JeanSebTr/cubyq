@@ -55,18 +55,9 @@ Network.prototype = {
     updateMap: function(data) {
         var i;
         var map = data.map;
-        var parts;
-        if(data.part) {
-            parts = [data.part];
-        }
-        else {
-            parts = data.parts || [];
-        }
         for(i=0; i<this.worlds.length && map != this.worlds[i].id; i++);
         if(i<this.worlds.length) {
-            for(var j=0; j<parts.length; j++) {
-                this.worlds[i].updateMap(parts[j]);
-            }
+            this.worlds[i].updateMap(data);
         }
     },
     syncTime: function() {
