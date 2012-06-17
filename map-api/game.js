@@ -1,7 +1,7 @@
 
 var mongoose = require('mongoose');
-var MapPart = mongoose.model('MapPart');
 var MapLayer = mongoose.model('MapLayer');
+var Tile = mongoose.model('Tile');
 
 module.exports = function(io) {
 
@@ -27,17 +27,18 @@ module.exports = function(io) {
 					console.log("Can't find layer", layerId, err);
 				}
 				else {
-					MapPart.find({layer: layer._id}, function(err, parts) {
+					Tile.find({layer: layer._id}, function(err, tiles) {
 						if(err) {
-							console.log();
+							console.log('Error getting tiles', err);
 						}
 						else {
 							var res = [];
-							parts.forEach(function(part) {this.push(part.toObject());}, res);
-							console.log('emit parts', res.length);
+							tiles.forEach(function(part) {this.push(part.toObject());}, res);
+							console.log('emit tiles', res.length);
 							socket.emit('updateMap', {
 								map: layer.map,
-								parts: res
+								layer: layer._id.toString(),
+								tiles: res
 							});
 						}
 					});
