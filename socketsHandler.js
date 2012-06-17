@@ -50,7 +50,6 @@ module.exports = function(io){
     var onPlayerInit = function(data){
         var slips = generateSlips();
         var socket = this;
-        console.log(data);
         initializePlayerInRedisStore(data, slips, function(){
             data.slips = slips;
             attachPlayerInfosToSocket(socket, data, function(){
@@ -67,7 +66,6 @@ module.exports = function(io){
 
     var onPlayerGameover = function(data){
         data = JSON.parse(data);
-        console.log(data);
         this.broadcast.volatile.emit('player-gameover', data);
         removePlayerFromRedisStore(data.id);
     }
