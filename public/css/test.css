@@ -264,3 +264,7 @@ html body div#footer
 	margin-bottom:20px;
 	text-align: center;
 }
+
+canvas {
+	border: 0;
+}
