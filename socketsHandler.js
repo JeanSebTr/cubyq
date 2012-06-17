@@ -66,7 +66,8 @@ module.exports = function(io){
 
     var onPlayerGameover = function(data){
         console.log(data);
-        this.broadcast.emit('player-gameover', data);
+        data = JSON.parse(data);
+        this.broadcast.volatile.emit('player-gameover', data);
     }
 
     //functions
