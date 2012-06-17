@@ -96,6 +96,7 @@ module.exports = function(io){
 
             data.x = randX * xMax + xMin;
             data.y = randY * yMax + yMin;
+            console.log(data);
             socket.emit('player-init', data);
             socket.broadcast.emit('player-connected', data);   
         });
