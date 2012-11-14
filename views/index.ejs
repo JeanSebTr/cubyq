@@ -8,7 +8,6 @@
     <link rel="stylesheet" href="/css/test.css" media="screen "/>
     <link href='http://fonts.googleapis.com/css?family=Bubblegum+Sans' rel='stylesheet' type='text/css' />
     <link href='http://fonts.googleapis.com/css?family=Karla' rel='stylesheet' type='text/css' />
-<% if(locals.user){ %>
     <script src="/vendor/base.js"></script>
     <script src="/deps.js"></script>
 
@@ -17,10 +16,10 @@
         tilesSize: 16
       };
       var userData = {
-        id: '<%= user.id %>',
-        fbId: '<%= user.fb.id %>',
-        fbName: '<%= user.fb.name.full %>',
-        fbFirstName: '<%= user.fb.name.first %>'
+        id: 1,
+        fbId: 2,
+        fbName: 'alaing',
+        fbFirstName: 'alain'
       };
       goog.require('GameEngine');
     </script>
@@ -31,7 +30,6 @@
     <script src="/engine/network.js"></script>
 
     <script src="/socket.io/socket.io.js"></script>
-<% } %>
 </head>
 <body>
     <h1 class="invisible">Capture de bobettes</h1> <!-- Titre du jeu (ne sera pas affiché dans la page, simplement pour le référencement Google) -->
@@ -39,11 +37,9 @@
     <div id="content"> <!-- Début de la div de contenu -->
         <h2>Capture de bobettes</h2> <!-- Noms du jeu qui sera affiché dans la page tel un H1 -->
         
-        <% if(locals.user){ %>
-        <div id="cont_play" name="cont_hist" class="invisible">
+        <div id="cont_play" name="cont_hist" class="">
             <canvas id="canvas" width="800" height="600"></canvas>
         </div>
-        <% } %>
 
         <div id="cont_hist" name="cont_hist"> <!-- Début de la div de l'histoire -->
             <h3>Histoire</h3>
@@ -92,11 +88,7 @@
         
         <div id="menu_bottom"> <!-- Début de la div menu_bottom -->
             <ul id="menu_princ"> <!-- Début de la liste menu_princ -->
-                <% if(locals.user){ %>
                 <li><a id="jouer" href="javascript:changerdiv0()">Jouer<img src="images/play.png" alt="jouer"/></a></li>
-                <% } else { %>
-                <li><a id="jouer" href="/auth/facebook">Jouer<img src="images/play.png" alt="jouer"/></a></li>
-                <% } %>
                 <li><a id="hist" href="javascript:changerdiv1()" class="selectionne">Histoire<img src="images/livre02.png" alt="histoire"/></a></li>
                 <li><a id="htp" href="javascript:changerdiv2()">Instructions<img src="images/touches.png" alt="instructions"/></a></li>
             </ul> <!-- Fin de la liste menu_princ -->
